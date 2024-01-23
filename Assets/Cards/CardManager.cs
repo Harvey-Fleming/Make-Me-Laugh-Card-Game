@@ -10,17 +10,21 @@ public class CardManager : MonoBehaviour
 
     System.Random random;
 
+    private GameObject[] submittedCards = new GameObject[3];
+
+    TurnPhase currentPhase = TurnPhase.Draw;
+
     [SerializeField] private GameObject startDeckParent;
     [SerializeField] private GameObject middleDeckParent;
     [SerializeField] private GameObject EndDeckParent;
     private GameObject[] deckParents;
 
-
-    [Header("")]
-    [SerializeField] private List<GameObject> StartCardDeck = new();
-    [SerializeField] private List<GameObject> MiddleCardDeck = new();
-    [SerializeField] private List<GameObject> EndCardDeck = new();
+    private List<GameObject> StartCardDeck = new();
+    private List<GameObject> MiddleCardDeck = new();
+    private List<GameObject> EndCardDeck = new();
     private List<List<GameObject>> fullDecks = new();
+
+    public TurnPhase CurrentPhase { get => currentPhase; }
 
     //TODO - Will handle checking synergies when cards are submitted
 
@@ -28,7 +32,7 @@ public class CardManager : MonoBehaviour
     {
         random = new();
 
-        if(Instance != null)
+        if (Instance != null)
         {
             Destroy(this.gameObject);
         }
@@ -38,15 +42,15 @@ public class CardManager : MonoBehaviour
         }
 
         //Initializes arrays for easier looping when adding all cards to the deck
-        if(startDeckParent != null && middleDeckParent != null && EndDeckParent != null)
+        if (startDeckParent != null && middleDeckParent != null && EndDeckParent != null)
         {
             deckParents = new GameObject[3] { startDeckParent, middleDeckParent, EndDeckParent };
         }
         else
         {
             Debug.LogError("Could not find a deck parent." + "Error in Card Manager Awake. Line: 27");
-        }        
-        
+        }
+
         fullDecks = new List<List<GameObject>> { StartCardDeck, MiddleCardDeck, EndCardDeck };
 
         foreach (GameObject deckparent in deckParents)
@@ -64,6 +68,24 @@ public class CardManager : MonoBehaviour
     private void Start()
     {
         ShuffleDecks();
+
+        ElevatorAnimation.Instance.SendUp();
+    }
+
+    public void OnButtonHit(List<GameObject> hand)
+    {
+        if(currentPhase == TurnPhase.Draw)
+        {
+            Debug.Log("End of Draw Phase... Submitting!");
+            currentPhase = TurnPhase.Submit;
+            for(int i = 0; i < hand.Count; i++)
+            {
+                submittedCards[i] = hand[i];
+            }
+            ButtonAnimations.Instance.PushButton();
+            ElevatorAnimation.Instance.SendDown();
+
+        }
     }
 
     //TODO - responsible for shuffling the deck at the start of a round
@@ -72,11 +94,6 @@ public class CardManager : MonoBehaviour
         StartCardDeck.Shuffle();
         MiddleCardDeck.Shuffle();
         EndCardDeck.Shuffle();
-
-        foreach(GameObject card in StartCardDeck)
-        {
-            Debug.Log(card.GetComponent<BaseCard>().CardDetails);
-        }
     }
 
     #region - Player Hand and Dealing
@@ -88,17 +105,16 @@ public class CardManager : MonoBehaviour
         ShuffleDecks();
         List<GameObject> newCardList = new();
 
-        foreach(List<GameObject> deck in fullDecks)
+        foreach (List<GameObject> deck in fullDecks)
         {
             newCardList.Add(deck[0]);
-            deck.Add(deck[0]);
             deck.Remove(deck[0]);
         }
 
         return newCardList;
     }
 
-    public GameObject RequestNewCard(CardType typeRequested, List<GameObject> currentHand)
+    public GameObject RequestNewCard(CardType typeRequested, GameObject cardToReplace)
     {
         GameObject card;
         
@@ -107,23 +123,109 @@ public class CardManager : MonoBehaviour
             case CardType.Start:
                 card = StartCardDeck[0];
                 StartCardDeck.Remove(card);
-                StartCardDeck.Add(card);
+                cardToReplace.transform.parent = startDeckParent.transform;
+                cardToReplace.transform.localPosition = Vector3.zero;
+                cardToReplace.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                StartCardDeck.Add(cardToReplace);
                 return card;
 
             case CardType.Middle:
                 card = MiddleCardDeck[0];
                 MiddleCardDeck.Remove(card);
-                MiddleCardDeck.Add(card);
+                cardToReplace.transform.parent = middleDeckParent.transform;
+                cardToReplace.transform.localPosition = Vector3.zero;
+                cardToReplace.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                MiddleCardDeck.Add(cardToReplace);
                 return card;
 
             case CardType.End:
                 card = EndCardDeck[0];
                 EndCardDeck.Remove(card);
-                EndCardDeck.Add(card);
+                cardToReplace.transform.parent = EndDeckParent.transform;
+                cardToReplace.transform.localPosition = Vector3.zero;
+                cardToReplace.transform.localRotation = Quaternion.Euler(0,0,0);
+                EndCardDeck.Add(cardToReplace);
                 return card;
             default:
                 return null;
         }
-        #endregion
+
     }
+
+    public void ReturnHand(List<GameObject> hand)
+    {
+        foreach(GameObject card in hand)
+        {
+            foreach (List<GameObject> deck in fullDecks)
+            {
+                switch (card.GetComponent<BaseCard>().CardDetails.CardType)
+                {
+                    case CardType.Start:
+                        StartCardDeck.Add(card);
+                        card.transform.parent = startDeckParent.transform;
+                        break;
+                    case CardType.Middle:
+                        MiddleCardDeck.Add(card);
+                        card.transform.parent = middleDeckParent.transform;
+                        break;
+                    case CardType.End:
+                        EndCardDeck.Add(card);
+                        card.transform.parent = EndDeckParent.transform;
+                        break;
+                }
+            }
+        }
+    }
+    #endregion
+
+    private void OnElevatorStop(bool isUp)
+    {
+        if (isUp && currentPhase is TurnPhase.Draw)
+        {
+            
+        }
+        else if (!isUp && currentPhase is TurnPhase.Submit)
+        {
+            deckParents[0].transform.parent.transform.position -= Vector3.down * 5;
+            ElevatorAnimation.Instance.SendUp();
+        }
+        else if(isUp && currentPhase is TurnPhase.Submit)
+        {
+            List<Transform> elevatorSlots = ElevatorAnimation.Instance.ElevatorSlots;
+            for (int i = 0; i < submittedCards.Length; i++)
+            {
+                submittedCards[i].transform.parent = elevatorSlots[i];
+                submittedCards[i].transform.localPosition = Vector3.zero;
+                submittedCards[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
+                ElevatorAnimation.Instance.SendDown();
+                currentPhase = TurnPhase.Judgement;
+            }
+        }
+        else if(!isUp && currentPhase == TurnPhase.Judgement)
+        {
+            //Execute Judgement Code
+        }
+    }
+
+    #region - Event Subscription
+    private void OnEnable()
+    {
+        ElevatorAnimation.OnElevatorStop += OnElevatorStop;
+    }
+
+    private void OnDisable()
+    {
+        ElevatorAnimation.OnElevatorStop -= OnElevatorStop;
+    }
+
+    #endregion
+}
+
+public enum TurnPhase
+{
+    Draw,
+    Submit,
+    Judgement,
+    Defeat,
+    Victory,
 }
