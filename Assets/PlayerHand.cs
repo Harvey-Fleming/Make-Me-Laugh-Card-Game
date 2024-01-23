@@ -15,19 +15,8 @@ public class PlayerHand : MonoBehaviour
 
     bool isRedraw = true;
 
-    private void Start()
-    {
-        
-    }
-
     private void Update()
     {
-        //if (storedActionCard != null)
-        //{
-        //    Debug.Log(storedActionCard.name);
-        //}
-        //else Debug.Log("Stored Card is null");
-
         SelectCardRaycast();
     }
 
@@ -45,7 +34,7 @@ public class PlayerHand : MonoBehaviour
                 //Debug.Log("Hit: " + hit.transform.name);
                 Debug.Log("Hit: " + hit.transform.parent.transform.parent);
 
-                
+                // If it is a card in the hand and is not part of the deck currently
                 if(hit.transform.TryGetComponent<BaseCard>(out BaseCard hitCard) && !hit.transform.parent.transform.parent.CompareTag("Decks"))
                 {
                     switch (hitCard.CardDetails.CardType)
@@ -64,6 +53,7 @@ public class PlayerHand : MonoBehaviour
                             break;
                     }
                 }
+                //If it is a card in the deck and we have selected a card to replace
                 else if (hit.transform.TryGetComponent<BaseCard>(out hitCard) && storedActionCard != null && hit.transform.parent.transform.parent.CompareTag("Decks"))
                 {
                     if (hitCard.CardDetails.CardType == storedActionCard.CardDetails.CardType && currentRerollsLeft > 0)
@@ -79,6 +69,7 @@ public class PlayerHand : MonoBehaviour
                         currentRerollsLeft--;
                     }
                 }
+                //If we hit the button
                 else if(hit.transform.name == "Button")
                 {
                     if(CardManager.Instance.CurrentPhase == TurnPhase.Draw)

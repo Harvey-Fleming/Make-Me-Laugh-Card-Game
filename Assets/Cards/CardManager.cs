@@ -7,6 +7,7 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     public static CardManager Instance;
+    private int ClownLives = 6;
 
     System.Random random;
 
@@ -25,6 +26,13 @@ public class CardManager : MonoBehaviour
     private List<List<GameObject>> fullDecks = new();
 
     public TurnPhase CurrentPhase { get => currentPhase; }
+
+    public delegate void ScoreEvent(int score);
+    public static event ScoreEvent SubmitScore;
+
+    public delegate void GameEvent();
+    public static event GameEvent onRoundStart;
+
 
     //TODO - Will handle checking synergies when cards are submitted
 
@@ -182,7 +190,7 @@ public class CardManager : MonoBehaviour
     {
         if (isUp && currentPhase is TurnPhase.Draw)
         {
-            
+            onRoundStart();
         }
         else if (!isUp && currentPhase is TurnPhase.Submit)
         {
@@ -204,6 +212,33 @@ public class CardManager : MonoBehaviour
         else if(!isUp && currentPhase == TurnPhase.Judgement)
         {
             //Execute Judgement Code
+            CalculateScore();
+
+        }
+    }
+
+    private void CalculateScore()
+    {
+        int score = 0;
+        foreach(GameObject card in submittedCards)
+        {
+            score++;
+        }
+        SubmitScore(score);
+
+        switch (score)
+        {
+            case 1:
+                Debug.Log("You got nobody laughing");
+                break;            
+            case 2 | 3:
+                Debug.Log("Clown Lost 1 Life");
+                ClownLives--;
+                break;            
+            case 4:
+                Debug.Log("Clown Loses 2 Lives!!!");
+                ClownLives -= 2;
+                break;
         }
     }
 
