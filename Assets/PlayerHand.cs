@@ -12,6 +12,7 @@ public class PlayerHand : MonoBehaviour
     public int CurrentRerollsLeft { get => currentRerollsLeft; set => currentRerollsLeft = value; }
 
     private BaseCard storedActionCard;
+    private Outline storedOutline = null;
 
     [SerializeField] private Transform SlotParents;
 
@@ -37,10 +38,47 @@ public class PlayerHand : MonoBehaviour
     //then if they click on a deck, if there is a card saved, it will check if it is the same type and if so, request to redraw that card.
     private void SelectCardRaycast()
     {
+        //Handle Outline on hover
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+        {
+            if (hit.transform.TryGetComponent<Outline>(out Outline hitOutline) && storedOutline == null)
+            {
+                storedOutline = hitOutline;
+                storedOutline.enabled = true;
+            }
+            else if (hit.transform.TryGetComponent<Outline>(out hitOutline) && storedOutline != null)
+            {
+                storedOutline.enabled = false;
+                storedOutline = hitOutline;
+                storedOutline.enabled = true;
+            }
+
+            //If we are not already outlining something and hover over an outlinable
+            if (hit.transform.GetComponentInChildren<Outline>() != null && storedOutline == null)
+            {
+                storedOutline = hit.transform.GetComponentInChildren<Outline>();
+                storedOutline.enabled = true;
+            }
+            //If we are not already outlining something and hover over an outlinable
+            else if (hit.transform.GetComponentInChildren<Outline>() != null && storedOutline != null)
+            {
+                storedOutline.enabled = false;
+                storedOutline = hit.transform.GetComponentInChildren<Outline>();
+                storedOutline.enabled = true;
+            }
+
+        }
+        else if (!Physics.Raycast(ray, out hit, Mathf.Infinity) && storedOutline != null)
+        {
+            storedOutline.enabled = false;
+            storedOutline = null;
+        }
+
+        //Handle Selecting Objects
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+            if (Physics.Raycast(ray, out  hit, Mathf.Infinity))
             {
                 //Debug.Log("Hit Parent is : " + hit.transform.parent.name);
                 //Debug.Log("Hit: " + hit.transform.name);
@@ -90,6 +128,18 @@ public class PlayerHand : MonoBehaviour
                         CardManager.Instance.OnButtonHit(playerHand);
                         ResetCards();
                     }
+                }
+                else if (hit.transform.name == "Table.001")
+                {
+                    hit.transform.GetComponent<PurchaseAbility>().TryPurchaseAbility();
+                }
+                else if (hit.transform.CompareTag("Ability"))
+                {
+                    hit.transform.parent.GetComponent<PurchaseAbility>().UseCurrentAbility();
+                }
+                else if (hit.transform.parent.CompareTag("Ability"))
+                {
+                    hit.transform.parent.transform.parent.GetComponent<PurchaseAbility>().UseCurrentAbility();
                 }
             }
             else

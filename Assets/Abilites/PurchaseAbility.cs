@@ -17,25 +17,15 @@ public class PurchaseAbility : MonoBehaviour
         HideAllAbilities();
     }
 
-    private void Update()
+    public void TryPurchaseAbility()
     {
-        if (!hasAbility)
+        if(!hasAbility && playerHand.CurrentRerollsLeft >= 1)
         {
-            if (Input.GetKeyDown(KeyCode.P) && playerHand.CurrentRerollsLeft >= 1)
-            {
-                RandomAbility();
-            }
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                UseCurrentAbility();
-            }
+            RandomAbility();
         }
     }
 
-    void UseCurrentAbility()
+    public void UseCurrentAbility()
     {
         abilities[currentAbility].GetComponent<Ability>().Use();
         hasAbility = false;
