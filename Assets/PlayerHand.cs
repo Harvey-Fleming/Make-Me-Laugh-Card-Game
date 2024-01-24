@@ -6,7 +6,7 @@ public class PlayerHand : MonoBehaviour
 {
     private List<GameObject> playerHand = new();
 
-    [SerializeField] private int maxRerollsPerRound = 2;
+    [SerializeField] private int startingRedraws = 2;
     private int currentRerollsLeft;
 
     private BaseCard storedActionCard;
@@ -14,6 +14,14 @@ public class PlayerHand : MonoBehaviour
     [SerializeField] private Transform SlotParents;
 
     bool isRedraw = true;
+    public delegate void UIEvent(int score);
+    public static event UIEvent OnRedrawNumUpdate;
+
+    private void Start()
+    {
+        OnRedrawNumUpdate(currentRerollsLeft);
+        currentRerollsLeft = startingRedraws;
+    }
 
     private void Update()
     {
@@ -67,6 +75,7 @@ public class PlayerHand : MonoBehaviour
                             SetCardParent(card);
                         }
                         currentRerollsLeft--;
+                        OnRedrawNumUpdate(currentRerollsLeft);
                     }
                 }
                 //If we hit the button
@@ -91,12 +100,11 @@ public class PlayerHand : MonoBehaviour
         List<GameObject> tempcardList = new();
         if (isRedraw)
         {
-            currentRerollsLeft = maxRerollsPerRound;
+            OnRedrawNumUpdate(currentRerollsLeft);
             Debug.Log("Request first Hand");
             tempcardList = CardManager.Instance.RequestInitialHand();
             foreach(GameObject card in tempcardList)
             {
-                Debug.Log("New Card is " + card.name);
                 playerHand.Add(card);
                 SetCardParent(card);
             }
@@ -122,6 +130,7 @@ public class PlayerHand : MonoBehaviour
 
         //Reset the player's number of rerolls
         currentRerollsLeft += 1;
+        OnRedrawNumUpdate(currentRerollsLeft);
     }
 
     private void OnRoundStart()

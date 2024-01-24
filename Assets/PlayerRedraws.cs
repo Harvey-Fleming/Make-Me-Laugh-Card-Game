@@ -1,20 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class PlayerRedraws : MonoBehaviour
 {
-    [SerializeField] private int playerRedraws;
-    [SerializeField] private Text redrawText;
+    private int playerRedraws;
+    [SerializeField] private TMP_Text redrawText;
 
-    private void Update()
+    public void UpdateRedrawUI(int Redraws)
     {
-        UpdateRedrawUI();
-    }
-
-    public void UpdateRedrawUI()
-    {
+        playerRedraws = Redraws;
         redrawText.text = playerRedraws.ToString();
     }
+
+
+    #region - Event Subscription
+    private void OnEnable()
+    {
+        PlayerHand.OnRedrawNumUpdate += UpdateRedrawUI;
+    }
+
+    private void OnDisable()
+    {
+        PlayerHand.OnRedrawNumUpdate -= UpdateRedrawUI;
+    }
+    #endregion
 }
