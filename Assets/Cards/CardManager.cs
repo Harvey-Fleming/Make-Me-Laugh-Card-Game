@@ -7,7 +7,7 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     public static CardManager Instance;
-    private int ClownLives = 6;
+    [SerializeField] private int ClownLives = 6;
 
     System.Random random;
 
@@ -32,6 +32,9 @@ public class CardManager : MonoBehaviour
 
     public delegate void GameEvent();
     public static event GameEvent OnRoundStart;
+
+    [SerializeField] private GameObject[] lightBulbs;
+    [SerializeField] private GameObject[] brokenLightBulbs;
 
 
     //TODO - Will handle checking synergies when cards are submitted
@@ -78,6 +81,11 @@ public class CardManager : MonoBehaviour
         ShuffleDecks();
 
         ElevatorAnimation.Instance.SendUp();
+    }
+
+    private void Update()
+    {
+        UpdateClownHealthUI();
     }
 
     public void OnButtonHit(List<GameObject> hand)
@@ -284,6 +292,8 @@ public class CardManager : MonoBehaviour
                 break;
         }
 
+        UpdateClownHealthUI();
+
         //Add Cards back to Deck
         StartCardDeck.Add(submittedCards[0]);
         SetCardParent(submittedCards[0], startDeckParent.transform);
@@ -307,6 +317,23 @@ public class CardManager : MonoBehaviour
             deckParents[0].transform.parent.transform.position += Vector3.down * 5;
             ElevatorAnimation.Instance.SendUp();
             currentPhase = TurnPhase.Draw;
+        }
+    }
+
+    public void UpdateClownHealthUI()
+    {
+        for (int i = 0; i < lightBulbs.Length; i++)
+        {
+            if(i >= ClownLives)
+            {
+                lightBulbs[i].SetActive(false);
+                brokenLightBulbs[i].SetActive(true);
+            }
+            else
+            {
+                lightBulbs[i].SetActive(true);
+                brokenLightBulbs[i].SetActive(false);
+            }
         }
     }
 
