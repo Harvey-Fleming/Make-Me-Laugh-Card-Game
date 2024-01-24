@@ -9,6 +9,8 @@ public class PlayerHand : MonoBehaviour
     [SerializeField] private int startingRedraws = 2;
     private int currentRerollsLeft;
 
+    public int CurrentRerollsLeft { get => currentRerollsLeft; set => currentRerollsLeft = value; }
+
     private BaseCard storedActionCard;
 
     [SerializeField] private Transform SlotParents;

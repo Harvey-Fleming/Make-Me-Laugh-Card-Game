@@ -8,6 +8,7 @@ public class PurchaseAbility : MonoBehaviour
     int currentAbility;
     public bool hasAbility;
     [SerializeField] private GameObject[] abilities;
+    [SerializeField] private PlayerHand playerHand;
 
     private void Start()
     {
@@ -20,7 +21,7 @@ public class PurchaseAbility : MonoBehaviour
     {
         if (!hasAbility)
         {
-            if (Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKeyDown(KeyCode.P) && playerHand.CurrentRerollsLeft >= 1)
             {
                 RandomAbility();
             }
@@ -50,6 +51,8 @@ public class PurchaseAbility : MonoBehaviour
             if(i == currentAbility)
             {
                 abilities[i].SetActive(true);
+                playerHand.CurrentRerollsLeft -= abilities[i].GetComponent<Ability>().cost;
+                playerHand.GetComponent<PlayerRedraws>().UpdateRedrawUI(playerHand.CurrentRerollsLeft);
                 hasAbility = true;
                 flipAnimator.SetTrigger("GoDown");
             }

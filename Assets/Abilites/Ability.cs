@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ability : MonoBehaviour
 {
-    private int cost = 1;
+    public int cost = 1;
 
     protected SwitchCamState switchCamState;
 
