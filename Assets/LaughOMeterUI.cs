@@ -16,4 +16,28 @@ public class LaughOMeterUI : MonoBehaviour
     {
         arrow.localRotation = Quaternion.Euler(Vector3.Lerp(minRotation, maxRotation, currentValue / maxValue));
     }
+
+    void SubmitScore(int score)
+    {
+        currentValue = score;
+    }
+
+    void ResetScore()
+    {
+        currentValue = 0;
+    }
+
+    #region - Event Subscription
+    private void OnEnable()
+    {
+        CardManager.SubmitScore += SubmitScore;
+        CardManager.OnRoundStart += ResetScore;
+    }
+
+    private void OnDisable()
+    {
+        CardManager.SubmitScore -= SubmitScore;
+        CardManager.OnRoundStart -= ResetScore;
+    }
+    #endregion
 }
