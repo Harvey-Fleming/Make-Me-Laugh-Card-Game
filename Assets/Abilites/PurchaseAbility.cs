@@ -17,26 +17,17 @@ public class PurchaseAbility : MonoBehaviour
         HideAllAbilities();
     }
 
-    private void Update()
+    public void TryPurchaseAbility()
     {
-        if (!hasAbility)
+        if(playerHand.CurrentRerollsLeft >= 1 && !hasAbility)
         {
-            if (Input.GetKeyDown(KeyCode.P) && playerHand.CurrentRerollsLeft >= 1)
-            {
-                RandomAbility();
-            }
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                UseCurrentAbility();
-            }
+            RandomAbility();
         }
     }
 
-    void UseCurrentAbility()
+    public void UseCurrentAbility()
     {
+        Debug.Log("Use ability");
         abilities[currentAbility].GetComponent<Ability>().Use();
         hasAbility = false;
         flipAnimator.SetTrigger("GoUp");
