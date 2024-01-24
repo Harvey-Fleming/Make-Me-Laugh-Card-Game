@@ -10,8 +10,6 @@ public class PlayerHand : MonoBehaviour
     private int currentRerollsLeft;
 
     public int CurrentRerollsLeft { get => currentRerollsLeft; set => currentRerollsLeft = value; }
-
-    private BaseCard storedActionCard;
     private Outline storedOutline = null;
 
     [SerializeField] private Transform SlotParents;
@@ -80,46 +78,38 @@ public class PlayerHand : MonoBehaviour
         {
             if (Physics.Raycast(ray, out  hit, Mathf.Infinity))
             {
-                //Debug.Log("Hit Parent is : " + hit.transform.parent.name);
-                //Debug.Log("Hit: " + hit.transform.name);
-                Debug.Log("Hit: " + hit.transform.parent.transform.parent);
-
                 // If it is a card in the hand and is not part of the deck currently
-                if(hit.transform.TryGetComponent<BaseCard>(out BaseCard hitCard) && !hit.transform.parent.transform.parent.CompareTag("Decks"))
+                if(hit.transform.TryGetComponent<BaseCard>(out BaseCard hitCard) && !hit.transform.parent.transform.parent.CompareTag("Decks") && currentRerollsLeft > 0)
                 {
                     switch (hitCard.CardDetails.CardType)
                     {
                         case CardType.Start:
-                            storedActionCard = hitCard;
-                            Debug.Log("Start Card selected");
+                            RedrawCard(hitCard);
                             break;
                         case CardType.Middle:
-                            storedActionCard = hitCard;
-                            Debug.Log("Middle Card selected");
+                            RedrawCard(hitCard);
                             break;
                         case CardType.End:
-                            storedActionCard = hitCard;
-                            Debug.Log("End Card selected");
+                            RedrawCard(hitCard);
                             break;
                     }
                 }
                 //If it is a card in the deck and we have selected a card to replace
-                else if (hit.transform.TryGetComponent<BaseCard>(out hitCard) && storedActionCard != null && hit.transform.parent.transform.parent.CompareTag("Decks"))
+                else if (hit.transform.TryGetComponent<BaseCard>(out hitCard) && hit.transform.parent.transform.parent.CompareTag("Decks") && currentRerollsLeft > 0)
                 {
-                    if (hitCard.CardDetails.CardType == storedActionCard.CardDetails.CardType && currentRerollsLeft > 0)
+                    foreach(GameObject card in playerHand)
                     {
-                        Debug.Log("Intent to redraw a " + hitCard.CardDetails.CardType);
-                        GameObject newcard = CardManager.Instance.RequestNewCard(storedActionCard.CardDetails.CardType, storedActionCard.gameObject);
-                        playerHand.Insert(playerHand.IndexOf(storedActionCard.gameObject), newcard);
-                        playerHand.Remove(storedActionCard.gameObject);
-                        foreach(GameObject card in playerHand)
+                        if(card.GetComponent<BaseCard>().CardDetails.CardType == hitCard.CardDetails.CardType)
                         {
-                            SetCardParent(card);
+                            Debug.Log("Found matching type");
+                            RedrawCard(card.GetComponent<BaseCard>());
+                            break;
                         }
-                        currentRerollsLeft--;
-                        OnRedrawNumUpdate(currentRerollsLeft);
+                        
                     }
+                    
                 }
+
                 //If we hit the button
                 else if(hit.transform.name == "Button")
                 {
@@ -133,20 +123,32 @@ public class PlayerHand : MonoBehaviour
                 {
                     hit.transform.GetComponent<PurchaseAbility>().TryPurchaseAbility();
                 }
+                //Used for clicking abilities.
                 else if (hit.transform.CompareTag("Ability"))
                 {
                     hit.transform.parent.GetComponent<PurchaseAbility>().UseCurrentAbility();
                 }
+                //Used for synergy Ticket.
                 else if (hit.transform.parent.CompareTag("Ability"))
                 {
                     hit.transform.parent.transform.parent.GetComponent<PurchaseAbility>().UseCurrentAbility();
                 }
             }
-            else
-            {
-                storedActionCard = null;
-            }
         }
+    }
+
+    private void RedrawCard(BaseCard cardToReplace)
+    {
+        Debug.Log("Intent to redraw a " + cardToReplace.CardDetails.CardType);
+        GameObject newcard = CardManager.Instance.RequestNewCard(cardToReplace.CardDetails.CardType, cardToReplace.gameObject);
+        playerHand.Insert(playerHand.IndexOf(cardToReplace.gameObject), newcard);
+        playerHand.Remove(cardToReplace.gameObject);
+        foreach (GameObject card in playerHand)
+        {
+            SetCardParent(card);
+        }
+        currentRerollsLeft--;
+        OnRedrawNumUpdate(currentRerollsLeft);
     }
 
     private void RequestCard()
