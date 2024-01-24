@@ -19,8 +19,8 @@ public class SwitchCamState : MonoBehaviour
     [Header("Lights View")]
     [SerializeField] private Vector3 lightsViewPos;
     [SerializeField] private Vector3 lightsViewRot;
-    private enum CamView { Top, Front, Left, Right, Lights};
-    private CamView currentView;
+    public enum CamView { Top, Front, Left, Right, Lights, CoinSlot};
+    public CamView currentView;
 
     private Vector3 nextCamPos;
     private Quaternion nextCamRot;
@@ -88,15 +88,9 @@ public class SwitchCamState : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, nextCamPos, timer / maxMoveTime);
             transform.localRotation = Quaternion.Lerp(transform.localRotation, nextCamRot, timer / maxMoveTime);
         }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            SwitchCamView(CamView.Lights);
-        }
-
     }
 
-    void SwitchCamView(CamView newCamView)
+    public void SwitchCamView(CamView newCamView)
     {
         switch (newCamView)
         {
