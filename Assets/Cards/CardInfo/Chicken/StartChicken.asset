@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardType: 0
   partOfJoke: Why did the chicken
-  synergies:
-  - {fileID: 11400000, guid: 072b840f9ca9a6f438b10ffb520478a9, type: 2}
+  weakSynergies: []
+  strongSynergies:
   - {fileID: 11400000, guid: a4b1c26b2bf83ec439b51e1cefb70d2c, type: 2}

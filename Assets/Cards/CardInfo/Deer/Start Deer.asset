@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardType: 0
   partOfJoke: What do you call
-  synergies:
+  weakSynergies: []
+  strongSynergies:
   - {fileID: 11400000, guid: a0dfc8b5bc67a2947b93e70e63e5b94e, type: 2}
+  - {fileID: 11400000, guid: 99c4680a047e38d438e794f4a861780c, type: 2}

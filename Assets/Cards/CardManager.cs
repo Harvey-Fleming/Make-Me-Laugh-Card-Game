@@ -105,8 +105,6 @@ public class CardManager : MonoBehaviour
     }
 
     #region - Player Hand and Dealing
-    //TODO - will handle requests from player to pick up a card
-
     //Initial Hand will the shuffle the list and get the first card in the list for each deck and return a list of the picked up hand to the player
     public List<GameObject> RequestInitialHand()
     {

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardType: 1
   partOfJoke: cross the road?
-  synergies:
-  - {fileID: 11400000, guid: 3873f9c2f772f2249b44a64e1f6ad136, type: 2}
+  weakSynergies:
   - {fileID: 11400000, guid: a4b1c26b2bf83ec439b51e1cefb70d2c, type: 2}
+  strongSynergies:
+  - {fileID: 11400000, guid: 3873f9c2f772f2249b44a64e1f6ad136, type: 2}

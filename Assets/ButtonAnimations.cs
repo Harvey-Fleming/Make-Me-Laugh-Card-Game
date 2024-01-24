@@ -26,6 +26,7 @@ public class ButtonAnimations : MonoBehaviour
 
     public void PushButton()
     {
+        Debug.Log("Button Should go down");
         animator.SetTrigger("pushButton");
     }
 }
