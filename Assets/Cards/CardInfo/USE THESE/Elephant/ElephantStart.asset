@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b7dfccd0ff8a84396b7d06776fdf85, type: 3}
+  m_Name: ElephantStart
+  m_EditorClassIdentifier: 
+  cardType: 0
+  partOfJoke: Why did the elephant
+  weakSynergies:
+  - {fileID: 11400000, guid: d1175b5cab5d77146bcf535c37a12fef, type: 2}
+  strongSynergies:
+  - {fileID: 11400000, guid: 1aa5733c758510f48a6bec9bc715e4d6, type: 2}

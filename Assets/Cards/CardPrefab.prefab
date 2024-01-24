@@ -303,7 +303,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0012475, y: 0}
+  m_AnchoredPosition: {x: -0.0012475, y: 0.0165}
   m_SizeDelta: {x: 0.15, y: 0.11606}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1490268224789876792
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Why did the chicken...
+  m_text: Because they tasted funny...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d80923e76b08b6e4bb2f63bf2890e041, type: 2}
   m_sharedMaterial: {fileID: 7927145387561153241, guid: d80923e76b08b6e4bb2f63bf2890e041,
@@ -362,8 +362,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.02
-  m_fontSizeBase: 0.02
+  m_fontSize: 0.023
+  m_fontSizeBase: 0.023
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0.01

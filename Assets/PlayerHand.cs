@@ -19,6 +19,8 @@ public class PlayerHand : MonoBehaviour
     public delegate void UIEvent(int score);
     public static event UIEvent OnRedrawNumUpdate;
 
+    [SerializeField] private SwitchCamState switchCamState;
+
     private void Start()
     {
         OnRedrawNumUpdate(currentRerollsLeft);
@@ -131,13 +133,15 @@ public class PlayerHand : MonoBehaviour
         playerHand.Clear();
 
         //Reset the player's number of rerolls
-        currentRerollsLeft += 1;
+        currentRerollsLeft += 2;
         OnRedrawNumUpdate(currentRerollsLeft);
     }
 
     private void OnRoundStart()
     {
         isRedraw = true;
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
+        switchCamState.canMove = true;
         RequestCard();
     }
 

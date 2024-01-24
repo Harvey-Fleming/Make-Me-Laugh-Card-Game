@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b7dfccd0ff8a84396b7d06776fdf85, type: 3}
+  m_Name: ArsClownMiddle
+  m_EditorClassIdentifier: 
+  cardType: 1
+  partOfJoke: set themself on fire?
+  weakSynergies: []
+  strongSynergies:
+  - {fileID: 11400000, guid: 6e94e27c5ff88824383f25afcede4248, type: 2}
+  - {fileID: 11400000, guid: 7a47f9c5397332549978f66a649273ff, type: 2}

@@ -36,6 +36,10 @@ public class CardManager : MonoBehaviour
     [SerializeField] private GameObject[] lightBulbs;
     [SerializeField] private GameObject[] brokenLightBulbs;
 
+    [SerializeField] private SwitchCamState switchCamState;
+
+    [SerializeField] private PlayerHP playerHP;
+
 
     //TODO - Will handle checking synergies when cards are submitted
 
@@ -83,16 +87,12 @@ public class CardManager : MonoBehaviour
         ElevatorAnimation.Instance.SendUp();
     }
 
-    private void Update()
-    {
-        UpdateClownHealthUI();
-    }
-
     public void OnButtonHit(List<GameObject> hand)
     {
         if(currentPhase == TurnPhase.Draw)
         {
             Debug.Log("End of Draw Phase... Submitting!");
+
             currentPhase = TurnPhase.Submit;
             for(int i = 0; i < hand.Count; i++)
             {
@@ -101,6 +101,8 @@ public class CardManager : MonoBehaviour
             ButtonAnimations.Instance.PushButton();
             ElevatorAnimation.Instance.SendDown();
 
+            switchCamState.canMove = false;
+            switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
         }
     }
 
@@ -196,6 +198,7 @@ public class CardManager : MonoBehaviour
         if (isUp && currentPhase is TurnPhase.Draw)
         {
             OnRoundStart();
+            switchCamState.canMove = true;
         }
         else if (!isUp && currentPhase is TurnPhase.Submit)
         {
@@ -215,6 +218,8 @@ public class CardManager : MonoBehaviour
         else if(!isUp && currentPhase == TurnPhase.Judgement)
         {
             //Execute Judgement Code
+            switchCamState.SwitchCamView(SwitchCamState.CamView.Right);
+            switchCamState.canMove = false;
             CalculateScore();
 
         }
@@ -279,20 +284,23 @@ public class CardManager : MonoBehaviour
         //Result based on Score
         switch (score)
         {
-            case 0 | 1:
+            case 0:
+            case 1:
                 Debug.Log("You got nobody laughing");
-                break;            
-            case 2 | 3:
+                StartCoroutine(PlayerDamageScene());
+                break;
+            case 2:
+            case 3:
                 Debug.Log("Clown Lost 1 Life");
                 ClownLives--;
+                StartCoroutine(ClownDamageScene());
                 break;            
             case >= 4:
                 Debug.Log("Clown Loses 2 Lives!!!");
                 ClownLives -= 2;
+                StartCoroutine(ClownDamageScene());
                 break;
         }
-
-        UpdateClownHealthUI();
 
         //Add Cards back to Deck
         StartCardDeck.Add(submittedCards[0]);
@@ -347,6 +355,29 @@ public class CardManager : MonoBehaviour
     {
         ElevatorAnimation.OnElevatorStop -= OnElevatorStop;
     }
+
+    IEnumerator ClownDamageScene()
+    {
+        switchCamState.canMove = false;
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Lights);
+        yield return new WaitForSeconds(2f);
+        UpdateClownHealthUI();
+        yield return new WaitForSeconds(2f);
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
+        switchCamState.canMove = true;
+    }
+
+    IEnumerator PlayerDamageScene()
+    {
+        switchCamState.canMove = false;
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Left);
+        yield return new WaitForSeconds(2f);
+        playerHP.TakeDamage();
+        yield return new WaitForSeconds(2f);
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
+        switchCamState.canMove = true;
+    }
+
 
     #endregion
 }

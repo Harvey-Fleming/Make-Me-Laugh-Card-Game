@@ -20,27 +20,23 @@ public class PlayerHP : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage();
-        }
-    }
-
-    private void TakeDamage()
+    public void TakeDamage()
     {
         healthPoints--;
+
+        Debug.Log("Lower HP");
 
         if(balloons[0].activeSelf == true)
         {
             balloons[0].SetActive(false);
             poppedBalloons[0].SetActive(true);
+            Debug.Log("Change graphic");
         }
         else
         {
             balloons[1].SetActive(false);
             poppedBalloons[1].SetActive(true);
+            Debug.Log("Change graphic");
         }
     }
 }

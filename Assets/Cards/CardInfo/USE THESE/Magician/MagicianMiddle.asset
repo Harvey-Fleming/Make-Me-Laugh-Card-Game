@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b7dfccd0ff8a84396b7d06776fdf85, type: 3}
+  m_Name: MagicianMiddle
+  m_EditorClassIdentifier: 
+  cardType: 1
+  partOfJoke: fire their assistant?
+  weakSynergies:
+  - {fileID: 11400000, guid: 7a47f9c5397332549978f66a649273ff, type: 2}
+  strongSynergies:
+  - {fileID: 11400000, guid: 13ce53a07fb59074bae6782958c231db, type: 2}
+  - {fileID: 11400000, guid: 7774537f4bb000a4b8d9837909211998, type: 2}
