@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class BaseCard : MonoBehaviour
@@ -12,8 +13,12 @@ public class BaseCard : MonoBehaviour
     [SerializeField] private TMP_Text jokeText;
 
     [Space]
-    [SerializeField] private GameObject dotLayoutParent;
-    [SerializeField] private GameObject dotPrefab;
+    [SerializeField] private Image FrontIcon;
+    [SerializeField] private Image BackIcon;
+    [Space]
+    [SerializeField] private Sprite elipsesSprite;
+    [SerializeField] private Sprite questionSprite;
+    [SerializeField] private Sprite exclamationSprite;
 
     public int ScoreToAdd { get => scoreToAdd; set => scoreToAdd = value; }
     public CardObject CardDetails { get => cardDetails; set => cardDetails = value; }
@@ -23,10 +28,22 @@ public class BaseCard : MonoBehaviour
     {
         jokeText.text = cardDetails.PartOfJoke;
 
-        for(int i = 0; i < (int)cardDetails.CardType; i++)
+        switch (cardDetails.CardType)
         {
-            Instantiate(dotPrefab, dotLayoutParent.transform);
+            case CardType.Start:
+                FrontIcon.sprite = elipsesSprite;
+                BackIcon.sprite = elipsesSprite;
+                break;
+            case CardType.Middle:
+                FrontIcon.sprite = questionSprite;
+                BackIcon.sprite = questionSprite;
+                break;
+            case CardType.End:
+                FrontIcon.sprite = exclamationSprite;
+                BackIcon.sprite = exclamationSprite;
+                break;
         }
+
     }
 }
 

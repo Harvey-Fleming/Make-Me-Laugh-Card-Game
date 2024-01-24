@@ -31,7 +31,7 @@ public class CardManager : MonoBehaviour
     public static event ScoreEvent SubmitScore;
 
     public delegate void GameEvent();
-    public static event GameEvent onRoundStart;
+    public static event GameEvent OnRoundStart;
 
 
     //TODO - Will handle checking synergies when cards are submitted
@@ -110,7 +110,6 @@ public class CardManager : MonoBehaviour
     //Initial Hand will the shuffle the list and get the first card in the list for each deck and return a list of the picked up hand to the player
     public List<GameObject> RequestInitialHand()
     {
-        ShuffleDecks();
         List<GameObject> newCardList = new();
 
         foreach (List<GameObject> deck in fullDecks)
@@ -190,7 +189,7 @@ public class CardManager : MonoBehaviour
     {
         if (isUp && currentPhase is TurnPhase.Draw)
         {
-            onRoundStart();
+            OnRoundStart();
         }
         else if (!isUp && currentPhase is TurnPhase.Submit)
         {
@@ -202,9 +201,7 @@ public class CardManager : MonoBehaviour
             List<Transform> elevatorSlots = ElevatorAnimation.Instance.ElevatorSlots;
             for (int i = 0; i < submittedCards.Length; i++)
             {
-                submittedCards[i].transform.parent = elevatorSlots[i];
-                submittedCards[i].transform.localPosition = Vector3.zero;
-                submittedCards[i].transform.localRotation = Quaternion.Euler(0, 0, 0);
+                SetCardParent(submittedCards[i], elevatorSlots[i]);
                 ElevatorAnimation.Instance.SendDown();
                 currentPhase = TurnPhase.Judgement;
             }
@@ -217,15 +214,63 @@ public class CardManager : MonoBehaviour
         }
     }
 
+    private void SetCardParent(GameObject card, Transform parent)
+    {
+        card.transform.parent = parent;
+        card.transform.localPosition = Vector3.zero;
+        card.transform.localRotation = Quaternion.Euler(0, 0, 0);
+    }
+
     private void CalculateScore()
     {
         int score = 0;
-        foreach(GameObject card in submittedCards)
+
+        //Check if first card relates to end card
+        foreach(CardObject synergy in submittedCards[0].GetComponent<BaseCard>().CardDetails.WeakSynergies)
         {
-            score++;
+            if(synergy.name == submittedCards[2].GetComponent<BaseCard>().CardDetails.name)
+            {
+                Debug.Log("Weak End Synergy Found");
+                score++;
+            }
+        }      
+        
+        foreach(CardObject synergy in submittedCards[0].GetComponent<BaseCard>().CardDetails.StrongSynergies)
+        {
+            if(synergy.name == submittedCards[2].GetComponent<BaseCard>().CardDetails.name)
+            {
+                Debug.Log("Strong End Synergy Found");
+                score += 2;
+            }
         }
+
+        for(int i = 0; i < 3; i += 2)
+        {
+            //Check if first card relates to end card
+            foreach (CardObject synergy in submittedCards[1].GetComponent<BaseCard>().CardDetails.WeakSynergies)
+            {
+                if (synergy.name == submittedCards[i].GetComponent<BaseCard>().CardDetails.name)
+                {
+                    Debug.Log("Weak Synergy Found");
+                    score++;
+                }
+            }
+            foreach (CardObject synergy in submittedCards[1].GetComponent<BaseCard>().CardDetails.StrongSynergies)
+            {
+                if (synergy.name == submittedCards[i].GetComponent<BaseCard>().CardDetails.name)
+                {
+                    Debug.Log("Strong Synergy Found");
+                    score += 2;
+                }
+            }
+        }
+        Debug.Log("Score is " + score);
+
         SubmitScore(score);
 
+        //Execute Tension + Sound Effect
+
+        //Result based on Score
         switch (score)
         {
             case 1:
@@ -235,10 +280,35 @@ public class CardManager : MonoBehaviour
                 Debug.Log("Clown Lost 1 Life");
                 ClownLives--;
                 break;            
-            case 4:
+            case >= 4:
                 Debug.Log("Clown Loses 2 Lives!!!");
                 ClownLives -= 2;
                 break;
+        }
+
+        //Add Cards back to Deck
+        StartCardDeck.Add(submittedCards[0]);
+        SetCardParent(submittedCards[0], startDeckParent.transform);
+        MiddleCardDeck.Add(submittedCards[1]);
+        SetCardParent(submittedCards[1], middleDeckParent.transform);
+        EndCardDeck.Add(submittedCards[2]);
+        SetCardParent(submittedCards[2], EndDeckParent.transform);
+
+        for(int i = 0; i < submittedCards.Length; i++)
+        {
+            submittedCards[i] = null;
+        }
+
+        if (ClownLives <= 0)
+        {
+            currentPhase = TurnPhase.Victory;
+            Debug.Log("Clown has been defeated");
+        }
+        else
+        {
+            deckParents[0].transform.parent.transform.position += Vector3.down * 5;
+            ElevatorAnimation.Instance.SendUp();
+            currentPhase = TurnPhase.Draw;
         }
     }
 

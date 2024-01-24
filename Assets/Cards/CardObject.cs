@@ -9,9 +9,11 @@ public class CardObject : ScriptableObject
 
     [SerializeField] private string partOfJoke;
 
-    [SerializeField] private CardObject[] synergies;
+    [SerializeField] private CardObject[] weakSynergies;
+    [SerializeField] private CardObject[] strongSynergies;
 
-    public CardObject[] Synergies { get => synergies;}
+    public CardObject[] WeakSynergies { get => weakSynergies; }
+    public CardObject[] StrongSynergies { get => strongSynergies; }
     public string PartOfJoke { get => partOfJoke;}
     public CardType CardType { get => cardType;}
 }

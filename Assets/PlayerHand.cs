@@ -75,6 +75,7 @@ public class PlayerHand : MonoBehaviour
                     if(CardManager.Instance.CurrentPhase == TurnPhase.Draw)
                     {
                         CardManager.Instance.OnButtonHit(playerHand);
+                        ResetCards();
                     }
                 }
             }
@@ -95,6 +96,7 @@ public class PlayerHand : MonoBehaviour
             tempcardList = CardManager.Instance.RequestInitialHand();
             foreach(GameObject card in tempcardList)
             {
+                Debug.Log("New Card is " + card.name);
                 playerHand.Add(card);
                 SetCardParent(card);
             }
@@ -116,37 +118,27 @@ public class PlayerHand : MonoBehaviour
     private void ResetCards()
     {
         //Will Handle Resetting the list of cards in the players hand
-        foreach(GameObject card in playerHand)
-        {
-            card.transform.position = Vector3.zero;
-            card.transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
         playerHand.Clear();
 
         //Reset the player's number of rerolls
         currentRerollsLeft += 1;
     }
 
-    private void OnElevatorStop(bool isUp)
+    private void OnRoundStart()
     {
-        if(isUp && isRedraw)
-        {
-            RequestCard();
-        }
+        isRedraw = true;
+        RequestCard();
     }
-
-
-
 
     #region - Event Subscription
     private void OnEnable()
     {
-        ElevatorAnimation.OnElevatorStop += OnElevatorStop;
+        CardManager.OnRoundStart += OnRoundStart;
     }
 
     private void OnDisable()
     {
-        ElevatorAnimation.OnElevatorStop -= OnElevatorStop;
+        CardManager.OnRoundStart -= OnRoundStart;
     }
 
     #endregion

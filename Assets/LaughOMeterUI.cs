@@ -31,13 +31,13 @@ public class LaughOMeterUI : MonoBehaviour
     private void OnEnable()
     {
         CardManager.SubmitScore += SubmitScore;
-        CardManager.onRoundStart += ResetScore;
+        CardManager.OnRoundStart += ResetScore;
     }
 
     private void OnDisable()
     {
         CardManager.SubmitScore -= SubmitScore;
-        CardManager.onRoundStart -= ResetScore;
+        CardManager.OnRoundStart -= ResetScore;
     }
     #endregion
 }
