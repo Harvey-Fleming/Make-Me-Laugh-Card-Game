@@ -273,7 +273,7 @@ public class CardManager : MonoBehaviour
         //Result based on Score
         switch (score)
         {
-            case 1:
+            case 0 | 1:
                 Debug.Log("You got nobody laughing");
                 break;            
             case 2 | 3:
