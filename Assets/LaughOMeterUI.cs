@@ -11,20 +11,48 @@ public class LaughOMeterUI : MonoBehaviour
 
     [SerializeField] private Transform arrow;
 
+    bool isMoving;
+    float timer;
+
     // Update is called once per frame
     void Update()
     {
-        arrow.localRotation = Quaternion.Euler(Vector3.Lerp(minRotation, maxRotation, currentValue / maxValue));
+        if (isMoving)
+        {
+            if(timer < currentValue)
+            {
+                timer += Time.deltaTime;
+            }
+            else
+            {
+                timer = currentValue;
+            }
+        }
+        else
+        {
+            if(timer > 0f)
+            {
+                timer -= Time.deltaTime;
+            }
+            else
+            {
+                timer = 0f;
+            }
+        }
+
+        arrow.localRotation = Quaternion.Euler(Vector3.Lerp(minRotation, maxRotation, timer / maxValue));
     }
 
     void SubmitScore(int score)
     {
         currentValue = score;
+        isMoving = true;
     }
 
     void ResetScore()
     {
-        currentValue = 0;
+        isMoving = false;
+        currentValue = 0f;
     }
 
     #region - Event Subscription

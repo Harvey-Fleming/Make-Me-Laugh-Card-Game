@@ -5737,6 +5737,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1610077954}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &2056791732 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8713066614342254349, guid: 6a9b6aacb34397345a34141c2c988b76,
+    type: 3}
+  m_PrefabInstance: {fileID: 1132931387}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2127068587
 GameObject:
   m_ObjectHideFlags: 0
@@ -7244,6 +7250,7 @@ MonoBehaviour:
   - {fileID: 495961127}
   switchCamState: {fileID: 330585549}
   playerHP: {fileID: 2127068588}
+  clownAnimator: {fileID: 2056791732}
 --- !u!33 &9037648752512804611
 MeshFilter:
   m_ObjectHideFlags: 0

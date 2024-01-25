@@ -40,6 +40,12 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private PlayerHP playerHP;
 
+    private enum ClownStates { Angry, BigLaugh, Chuckle, Idle, Wait, Laugh}
+
+    private ClownStates currentClownState;
+
+    [SerializeField] private Animator clownAnimator;
+
 
     //TODO - Will handle checking synergies when cards are submitted
 
@@ -85,6 +91,8 @@ public class CardManager : MonoBehaviour
         ShuffleDecks();
 
         ElevatorAnimation.Instance.SendUp();
+
+        SetClownState(ClownStates.Idle);
     }
 
     public void OnButtonHit(List<GameObject> hand)
@@ -198,6 +206,7 @@ public class CardManager : MonoBehaviour
         if (isUp && currentPhase is TurnPhase.Draw)
         {
             OnRoundStart();
+            SetClownState(ClownStates.Wait);
             switchCamState.canMove = true;
         }
         else if (!isUp && currentPhase is TurnPhase.Submit)
@@ -285,14 +294,19 @@ public class CardManager : MonoBehaviour
         switch (score)
         {
             case 0:
-            case 1:
                 Debug.Log("You got nobody laughing");
+                StartCoroutine(PlayerDamageScene());
+                break;
+            case 1:
+                Debug.Log("Slight Chuckle");
+                SetClownState(ClownStates.Chuckle);
                 StartCoroutine(PlayerDamageScene());
                 break;
             case 2:
             case 3:
                 Debug.Log("Clown Lost 1 Life");
                 ClownLives--;
+                SetClownState(ClownStates.Laugh);
                 StartCoroutine(ClownDamageScene());
                 break;            
             case >= 4:
@@ -325,6 +339,11 @@ public class CardManager : MonoBehaviour
             deckParents[0].transform.parent.transform.position += Vector3.down * 5;
             ElevatorAnimation.Instance.SendUp();
             currentPhase = TurnPhase.Draw;
+
+            if(ClownLives <= 3)
+            {
+                SetClownState(ClownStates.Angry);
+            }
         }
     }
 
@@ -342,6 +361,39 @@ public class CardManager : MonoBehaviour
                 lightBulbs[i].SetActive(true);
                 brokenLightBulbs[i].SetActive(false);
             }
+        }
+    }
+
+    private void SetClownState(ClownStates clownState)
+    {
+        switch (clownState)
+        {
+            case ClownStates.Angry:
+                Debug.Log("Clown is angry");
+                clownAnimator.SetTrigger("Angry");
+                break;
+            case ClownStates.BigLaugh:
+                Debug.Log("Clown is big laughing");
+                clownAnimator.SetTrigger("BigLaugh");
+                break;
+            case ClownStates.Chuckle:
+                Debug.Log("Clown is chuckling");
+                clownAnimator.SetTrigger("Chuckle");
+                break;
+            case ClownStates.Idle:
+                Debug.Log("Clown is idle");
+                clownAnimator.SetTrigger("Idle");
+                break;
+            case ClownStates.Wait:
+                Debug.Log("Clown is waiting");
+                clownAnimator.SetTrigger("Wait");
+                break;
+            case ClownStates.Laugh:
+                Debug.Log("Clown is laughing");
+                clownAnimator.SetTrigger("Laugh");
+                break;
+            default:
+                break;
         }
     }
 
@@ -373,6 +425,7 @@ public class CardManager : MonoBehaviour
         switchCamState.SwitchCamView(SwitchCamState.CamView.Left);
         yield return new WaitForSeconds(2f);
         playerHP.TakeDamage();
+        SetClownState(ClownStates.Idle);
         yield return new WaitForSeconds(2f);
         switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
         switchCamState.canMove = true;
