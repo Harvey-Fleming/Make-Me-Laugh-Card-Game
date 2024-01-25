@@ -337,8 +337,6 @@ public class CardManager : MonoBehaviour
         else
         {
             deckParents[0].transform.parent.transform.position += Vector3.down * 5;
-            ElevatorAnimation.Instance.SendUp();
-            currentPhase = TurnPhase.Draw;
 
             if(ClownLives <= 3)
             {
@@ -418,6 +416,8 @@ public class CardManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
         switchCamState.canMove = true;
+        ElevatorAnimation.Instance.SendUp();
+        currentPhase = TurnPhase.Draw;
     }
 
     IEnumerator PlayerDamageScene()
@@ -430,6 +430,8 @@ public class CardManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
         switchCamState.canMove = true;
+        ElevatorAnimation.Instance.SendUp();
+        currentPhase = TurnPhase.Draw;
     }
 
 
