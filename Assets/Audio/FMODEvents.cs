@@ -9,10 +9,8 @@ public class FMODEvents : MonoBehaviour
     public static FMODEvents instance { get; private set; }
 
     [field: Header("Menu SFX")]
-    [field: SerializeField] public EventReference testSFX { get; private set; } 
 
     [field: Header("Music")]
-    [field: SerializeField] public EventReference testMusic { get; private set; }
 
     [field: Header("Clown SFX")]
 
@@ -23,16 +21,13 @@ public class FMODEvents : MonoBehaviour
 
     [field: Header("UI SFX")]
 
-    [field: SerializeField] public EventReference cardShuffling { get; private set; }
     [field: SerializeField] public EventReference cardDraw { get; private set; }
     [field: SerializeField] public EventReference cardPlacing { get; private set; }
     [field: SerializeField] public EventReference cardLiftUp { get; private set; }
-    [field: SerializeField] public EventReference cardLiftDown { get; private set; }
     [field: SerializeField] public EventReference balloonPop { get; private set; }
     [field: SerializeField] public EventReference laughometerFull { get; private set; }
     [field: SerializeField] public EventReference laughometerMid { get; private set; }
     [field: SerializeField] public EventReference lightExplode { get; private set; }
-    [field: SerializeField] public EventReference lightTurnOff { get; private set; }
 
 
     private void Awake()
