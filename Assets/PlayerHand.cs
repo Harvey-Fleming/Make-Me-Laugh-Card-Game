@@ -228,6 +228,7 @@ public class PlayerHand : MonoBehaviour
         if (!hasSynergy)
         {
             newcard = CardManager.Instance.RequestNewCard(cardToReplace.CardDetails.CardType, cardToReplace.gameObject);
+            currentRerollsLeft--;
         }
         else if (hasSynergy)
         {
@@ -237,8 +238,6 @@ public class PlayerHand : MonoBehaviour
                     newcard = CheckSynergies(CardType.Start, 1, cardToReplace);
                     hasSynergy = false;
                     break;
-
-
                 case CardType.Middle:
                     List<GameObject> tempSynergyList = new();
                     List<GameObject> tempweakSynergyList = new();
@@ -348,7 +347,6 @@ public class PlayerHand : MonoBehaviour
         {
             SetCardParent(card);
         }
-        currentRerollsLeft--;
         OnRedrawNumUpdate(currentRerollsLeft);
     }
 
