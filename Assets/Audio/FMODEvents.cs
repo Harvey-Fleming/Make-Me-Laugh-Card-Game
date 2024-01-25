@@ -30,6 +30,10 @@ public class FMODEvents : MonoBehaviour
     [field: SerializeField] public EventReference laughometerFull { get; private set; }
     [field: SerializeField] public EventReference laughometerMid { get; private set; }
     [field: SerializeField] public EventReference lightExplode { get; private set; }
+    [field: SerializeField] public EventReference ButtonPress { get; private set; }
+    [field: SerializeField] public EventReference CrystalBall { get; private set; }
+    [field: SerializeField] public EventReference CoinInsert { get; private set; }
+    [field: SerializeField] public EventReference TokenInsert { get; private set; }
 
 
     private void Awake()
