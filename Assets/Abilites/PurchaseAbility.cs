@@ -45,6 +45,7 @@ public class PurchaseAbility : MonoBehaviour
                 playerHand.GetComponent<PlayerRedraws>().UpdateRedrawUI(playerHand.CurrentRerollsLeft);
                 hasAbility = true;
                 flipAnimator.SetTrigger("GoDown");
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.ItemFlip, transform.position);
             }
             else
             {

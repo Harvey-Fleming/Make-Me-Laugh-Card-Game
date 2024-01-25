@@ -18,6 +18,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] private GameObject startDeckParent;
     [SerializeField] private GameObject middleDeckParent;
     [SerializeField] private GameObject EndDeckParent;
+    [SerializeField] private GameObject LaughoMeter;
     private GameObject[] deckParents;
 
     private List<GameObject> StartCardDeck = new();
@@ -317,12 +318,14 @@ public class CardManager : MonoBehaviour
                 Debug.Log("Clown Lost 1 Life");
                 ClownLives--;
                 SetClownState(ClownStates.Laugh);
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.laughometerMid, LaughoMeter.transform.position);
                 StartCoroutine(ClownDamageScene());
                 break;            
             case >= 4:
                 Debug.Log("Clown Loses 2 Lives!!!");
                 ClownLives -= 2;
                 SetClownState(ClownStates.BigLaugh);
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.laughometerFull, LaughoMeter.transform.position);
                 StartCoroutine(ClownDamageScene());
                 break;
         }

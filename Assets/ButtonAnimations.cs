@@ -28,5 +28,6 @@ public class ButtonAnimations : MonoBehaviour
     {
         Debug.Log("Button Should go down");
         animator.SetTrigger("pushButton");
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.ButtonPress, this.transform.position);
     }
 }

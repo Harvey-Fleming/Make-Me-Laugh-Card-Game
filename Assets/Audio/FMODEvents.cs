@@ -19,6 +19,7 @@ public class FMODEvents : MonoBehaviour
     [field: SerializeField] public EventReference clownLaugh { get; private set; }
     [field: SerializeField] public EventReference clownGiggle { get; private set; }
     [field: SerializeField] public EventReference clownNotConvinced { get; private set; }
+    [field: SerializeField] public EventReference clownFuckinDies { get; private set; }
 
     [field: Header("UI SFX")]
 
@@ -29,6 +30,7 @@ public class FMODEvents : MonoBehaviour
     [field: SerializeField] public EventReference balloonPop { get; private set; }
     [field: SerializeField] public EventReference laughometerFull { get; private set; }
     [field: SerializeField] public EventReference laughometerMid { get; private set; }
+    [field: SerializeField] public EventReference laughometerBad { get; private set; }
     [field: SerializeField] public EventReference lightExplode { get; private set; }
     [field: SerializeField] public EventReference ButtonPress { get; private set; }
     [field: SerializeField] public EventReference CrystalBall { get; private set; }

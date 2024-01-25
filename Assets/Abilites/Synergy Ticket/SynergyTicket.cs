@@ -16,6 +16,7 @@ public class SynergyTicket : Ability
         //gameObject.SetActive(false);
         switchCamState.SwitchCamView(SwitchCamState.CamView.CoinSlot);
         synergyAnimator.SetTrigger("Use");
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.TokenInsert, transform.position);
         yield return new WaitForSeconds(1f);
         switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
     }

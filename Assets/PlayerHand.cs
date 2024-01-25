@@ -212,6 +212,7 @@ public class PlayerHand : MonoBehaviour
         GameObject newcard = CardManager.Instance.RequestNewCard(cardToReplace.CardDetails.CardType, cardToReplace.gameObject);
         playerHand.Insert(playerHand.IndexOf(cardToReplace.gameObject), newcard);
         playerHand.Remove(cardToReplace.gameObject);
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.cardDraw, transform.position);
         foreach (GameObject card in playerHand)
         {
             SetCardParent(card);

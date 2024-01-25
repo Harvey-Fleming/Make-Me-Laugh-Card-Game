@@ -9,6 +9,7 @@ public class CrystalBall : Ability
     public override void Use()
     {
         smokeFX.SetActive(true);
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.CrystalBall, transform.position);
         gameObject.SetActive(false);
     }
 }
