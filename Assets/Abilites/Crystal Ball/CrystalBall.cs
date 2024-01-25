@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class CrystalBall : Ability
 {
+    [SerializeField] private GameObject smokeFX;
+
     public override void Use()
     {
-        //gameObject.SetActive(false);
+        smokeFX.SetActive(true);
+        gameObject.SetActive(false);
     }
 }

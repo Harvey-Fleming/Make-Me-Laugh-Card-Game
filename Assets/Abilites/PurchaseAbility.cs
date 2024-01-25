@@ -29,7 +29,7 @@ public class PurchaseAbility : MonoBehaviour
     {
         abilities[currentAbility].GetComponent<Ability>().Use();
         hasAbility = false;
-        flipAnimator.SetTrigger("GoUp");
+        StartCoroutine(FlipDelay());
     }
 
     void RandomAbility()
@@ -59,5 +59,11 @@ public class PurchaseAbility : MonoBehaviour
         {
             abilities[i].SetActive(false);
         }
+    }
+
+    IEnumerator FlipDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        flipAnimator.SetTrigger("GoUp");
     }
 }

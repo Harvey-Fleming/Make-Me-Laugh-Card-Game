@@ -8,16 +8,10 @@ public class PlayerHP : MonoBehaviour
     [SerializeField] private int maxHealthPoints;
 
     [SerializeField] private GameObject[] balloons;
-    [SerializeField] private GameObject[] poppedBalloons;
 
     private void Start()
     {
         healthPoints = maxHealthPoints;
-
-        for (int i = 0; i < poppedBalloons.Length; i++)
-        {
-            poppedBalloons[i].SetActive(false);
-        }
     }
 
     public void TakeDamage()
@@ -28,17 +22,11 @@ public class PlayerHP : MonoBehaviour
 
         if(balloons[0].activeSelf == true)
         {
-            balloons[0].SetActive(false);
-            AudioManager.instance.PlayOneShot(FMODEvents.instance.balloonPop, balloons[0].transform.position);
-            poppedBalloons[0].SetActive(true);
-            Debug.Log("Change graphic");
+            balloons[0].GetComponent<Animator>().SetTrigger("Popped");
         }
         else
         {
-            balloons[1].SetActive(false);
-            AudioManager.instance.PlayOneShot(FMODEvents.instance.balloonPop, balloons[1].transform.position);
-            poppedBalloons[1].SetActive(true);
-            Debug.Log("Change graphic");
+            balloons[1].GetComponent<Animator>().SetTrigger("Popped");
         }
     }
 }

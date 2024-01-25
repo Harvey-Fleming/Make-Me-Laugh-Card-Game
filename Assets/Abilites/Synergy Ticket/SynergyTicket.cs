@@ -4,13 +4,7 @@ using UnityEngine;
 
 public class SynergyTicket : Ability
 {
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Use();
-        }
-    }
+    [SerializeField] private Animator synergyAnimator;
 
     public override void Use()
     {
@@ -21,6 +15,7 @@ public class SynergyTicket : Ability
     {
         //gameObject.SetActive(false);
         switchCamState.SwitchCamView(SwitchCamState.CamView.CoinSlot);
+        synergyAnimator.SetTrigger("Use");
         yield return new WaitForSeconds(1f);
         switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
     }

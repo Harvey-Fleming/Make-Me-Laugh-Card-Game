@@ -83,7 +83,7 @@ public class PlayerHand : MonoBehaviour
             {
                 storedhover = hit.transform.parent.gameObject;
 
-                UiText.text = hit.transform.GetComponent<Ability>().abilityTxtInfo;
+                UiText.text = hit.transform.parent.GetComponent<Ability>().abilityTxtInfo;
                 UiTextBox.SetActive(true);
 
                 if (storedhover.transform.localPosition.y - abilityHoverStrength > -abilityMaxHoverHeight + -0.016)

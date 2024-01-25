@@ -19,6 +19,9 @@ public class SwitchCamState : MonoBehaviour
     [Header("Lights View")]
     [SerializeField] private Vector3 lightsViewPos;
     [SerializeField] private Vector3 lightsViewRot;
+    [Header("Lights View")]
+    [SerializeField] private Vector3 coinSlotPos;
+    [SerializeField] private Vector3 coinSlotRot;
     public enum CamView { Top, Front, Left, Right, Lights, CoinSlot};
     public CamView currentView;
 
@@ -135,6 +138,14 @@ public class SwitchCamState : MonoBehaviour
                 currentView = CamView.Lights;
                 nextCamPos = lightsViewPos;
                 nextCamRot = Quaternion.Euler(lightsViewRot);
+                timer = 0f;
+                isLerping = true;
+                break;
+
+            case CamView.CoinSlot:
+                currentView = CamView.CoinSlot;
+                nextCamPos = coinSlotPos;
+                nextCamRot = Quaternion.Euler(coinSlotRot);
                 timer = 0f;
                 isLerping = true;
                 break;
