@@ -9,6 +9,7 @@ public class FMODEvents : MonoBehaviour
     public static FMODEvents instance { get; private set; }
 
     [field: Header("Menu SFX")]
+    [field: SerializeField] public EventReference Music { get; private set; }
 
     [field: Header("Music")]
 
@@ -24,6 +25,7 @@ public class FMODEvents : MonoBehaviour
     [field: SerializeField] public EventReference cardDraw { get; private set; }
     [field: SerializeField] public EventReference cardPlacing { get; private set; }
     [field: SerializeField] public EventReference cardLiftUp { get; private set; }
+    [field: SerializeField] public EventReference ItemFlip { get; private set; }
     [field: SerializeField] public EventReference balloonPop { get; private set; }
     [field: SerializeField] public EventReference laughometerFull { get; private set; }
     [field: SerializeField] public EventReference laughometerMid { get; private set; }
@@ -37,5 +39,11 @@ public class FMODEvents : MonoBehaviour
             Debug.LogError("Found more than one FMOD Events instance in the scene");
         }
         instance = this;
+    }
+
+    private void Start()
+    {
+
+        AudioManager.instance.InitialiseMusic(Music);
     }
 }

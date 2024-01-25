@@ -354,6 +354,7 @@ public class CardManager : MonoBehaviour
                 lightBulbs[i].SetActive(false);
                 AudioManager.instance.PlayOneShot(FMODEvents.instance.lightExplode, lightBulbs[i].transform.position);
                 brokenLightBulbs[i].SetActive(true);
+                AudioManager.instance.musicEventInstance.setParameterByName("ClownHealth", ClownLives);
             }
             else
             {

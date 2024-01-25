@@ -226,7 +226,7 @@ MonoBehaviour:
       Data2: 1116094663
       Data3: 12174241
       Data4: 1378810738
-    Path: event:/Music/TestMusic
+    Path: event:/Music/Music
   Event: 
   PlayEvent: 1
   StopEvent: 0
@@ -897,20 +897,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124b6f69efdd04a45932cd208b98fb48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <testSFX>k__BackingField:
-    Guid:
-      Data1: -2136972868
-      Data2: 1257295410
-      Data3: 1770016660
-      Data4: -768931030
-    Path: event:/SFX/TestEvent
-  <testMusic>k__BackingField:
-    Guid:
-      Data1: 1457198078
-      Data2: 1116094663
-      Data3: 12174241
-      Data4: 1378810738
-    Path: event:/Music/TestMusic
   <bigClownLaugh>k__BackingField:
     Guid:
       Data1: 0
@@ -939,13 +925,6 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
-  <cardShuffling>k__BackingField:
-    Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
   <cardDraw>k__BackingField:
     Guid:
       Data1: 0
@@ -961,13 +940,6 @@ MonoBehaviour:
       Data4: 0
     Path: 
   <cardLiftUp>k__BackingField:
-    Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
-  <cardLiftDown>k__BackingField:
     Guid:
       Data1: 0
       Data2: 0
@@ -996,13 +968,6 @@ MonoBehaviour:
       Data4: 0
     Path: 
   <lightExplode>k__BackingField:
-    Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
-  <lightTurnOff>k__BackingField:
     Guid:
       Data1: 0
       Data2: 0

@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour
 
     private List<StudioEventEmitter> eventEmitters;
 
-    private EventInstance musicEventInstance;
+    public EventInstance musicEventInstance;
     public static AudioManager instance { get; private set; }
 
 
