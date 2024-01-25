@@ -10,8 +10,6 @@ public class PlayerHand : MonoBehaviour
     [SerializeField] private int startingRedraws = 2;
     private int currentRerollsLeft;
 
-    public int CurrentRerollsLeft { get => currentRerollsLeft; set => currentRerollsLeft = value; }
-
     private Outline storedOutline = null;
     private GameObject storedhover = null;
     [SerializeField] private float cardHoverStrength = 0.005f;
@@ -20,6 +18,10 @@ public class PlayerHand : MonoBehaviour
     [SerializeField] private float abilityMaxHoverHeight = 0.05f;
 
     [SerializeField] private Transform SlotParents;
+    private bool hasSynergy;
+    private int synergyStrength = 0;
+
+    System.Random random = new();
 
     bool isRedraw = true;
     public delegate void UIEvent(int score);
@@ -28,6 +30,11 @@ public class PlayerHand : MonoBehaviour
     [SerializeField] private SwitchCamState switchCamState;
     [SerializeField] private GameObject UiTextBox;
     [SerializeField] private TextMeshProUGUI UiText;
+
+    public int CurrentRerollsLeft { get => currentRerollsLeft; set => currentRerollsLeft = value; }
+    public bool IsRedraw { get => isRedraw; set => isRedraw = value; }
+    public bool HasSynergy { get => hasSynergy; set => hasSynergy = value; }
+    public int SynergyStrength { get => synergyStrength; set => synergyStrength = value; }
 
     private void Start()
     {
@@ -76,6 +83,8 @@ public class PlayerHand : MonoBehaviour
                 storedOutline.enabled = true;
             }
             #endregion
+
+            #region - Hover Over
             //Used for Storing Objects that will hover
 
             //This is specific to the synergy ticket
@@ -139,6 +148,7 @@ public class PlayerHand : MonoBehaviour
             }
 
         }
+        #endregion
 
         //Handle Selecting Objects
         #region - Clicking Objects
@@ -147,33 +157,39 @@ public class PlayerHand : MonoBehaviour
             if (Physics.Raycast(ray, out  hit, Mathf.Infinity))
             {
                 // If it is a card in the hand and is not part of the deck currently
-                if(hit.transform.TryGetComponent<BaseCard>(out BaseCard hitCard) && !hit.transform.parent.transform.parent.CompareTag("Decks") && currentRerollsLeft > 0)
+                if(hit.transform.TryGetComponent<BaseCard>(out BaseCard hitCard) && !hit.transform.parent.transform.parent.CompareTag("Decks"))
                 {
-                    switch (hitCard.CardDetails.CardType)
+                    if (hasSynergy | currentRerollsLeft > 0)
                     {
-                        case CardType.Start:
-                            RedrawCard(hitCard);
-                            break;
-                        case CardType.Middle:
-                            RedrawCard(hitCard);
-                            break;
-                        case CardType.End:
-                            RedrawCard(hitCard);
-                            break;
+                        switch (hitCard.CardDetails.CardType)
+                        {
+                            case CardType.Start:
+                                RedrawCard(hitCard);
+                                break;
+                            case CardType.Middle:
+                                RedrawCard(hitCard);
+                                break;
+                            case CardType.End:
+                                RedrawCard(hitCard);
+                                break;
+                        }
                     }
                 }
                 //If it is a card in the deck and we have selected a card to replace
-                else if (hit.transform.TryGetComponent<BaseCard>(out hitCard) && hit.transform.parent.transform.parent.CompareTag("Decks") && currentRerollsLeft > 0)
+                else if (hit.transform.TryGetComponent<BaseCard>(out hitCard) && hit.transform.parent.transform.parent.CompareTag("Decks"))
                 {
-                    foreach(GameObject card in playerHand)
+                    if (hasSynergy | currentRerollsLeft > 0)
                     {
-                        if(card.GetComponent<BaseCard>().CardDetails.CardType == hitCard.CardDetails.CardType)
+                        foreach (GameObject card in playerHand)
                         {
-                            Debug.Log("Found matching type");
-                            RedrawCard(card.GetComponent<BaseCard>());
-                            break;
+                            if (card.GetComponent<BaseCard>().CardDetails.CardType == hitCard.CardDetails.CardType)
+                            {
+                                Debug.Log("Found matching type");
+                                RedrawCard(card.GetComponent<BaseCard>());
+                                break;
+                            }
+
                         }
-                        
                     }
                     
                 }
@@ -197,7 +213,7 @@ public class PlayerHand : MonoBehaviour
                     hit.transform.parent.GetComponent<PurchaseAbility>().UseCurrentAbility();
                 }
                 //Used for synergy Ticket.
-                else if (hit.transform.parent.CompareTag("Ability"))
+                else if (hit.transform.parent != null && hit.transform.parent.CompareTag("Ability"))
                 {
                     hit.transform.parent.transform.parent.GetComponent<PurchaseAbility>().UseCurrentAbility();
                 }
@@ -208,8 +224,123 @@ public class PlayerHand : MonoBehaviour
 
     private void RedrawCard(BaseCard cardToReplace)
     {
-        Debug.Log("Intent to redraw a " + cardToReplace.CardDetails.CardType);
-        GameObject newcard = CardManager.Instance.RequestNewCard(cardToReplace.CardDetails.CardType, cardToReplace.gameObject);
+        GameObject newcard = null;
+        if (!hasSynergy)
+        {
+            newcard = CardManager.Instance.RequestNewCard(cardToReplace.CardDetails.CardType, cardToReplace.gameObject);
+        }
+        else if (hasSynergy)
+        {
+            switch (cardToReplace.CardDetails.CardType)
+            {
+                case CardType.Start:
+                    newcard = CheckSynergies(CardType.Start, 1, cardToReplace);
+                    hasSynergy = false;
+                    break;
+
+
+                case CardType.Middle:
+                    List<GameObject> tempSynergyList = new();
+                    List<GameObject> tempweakSynergyList = new();
+                    List<GameObject> tempstrongSynergyList = new();
+
+                    GameObject synergy1 = CheckSynergies(CardType.Middle, 0, cardToReplace);
+                    GameObject synergy2 = CheckSynergies(CardType.Middle, 2, cardToReplace);
+
+                    Debug.Log(synergy1);
+                    Debug.Log(synergy2);
+
+                    if (synergy1 != null) tempSynergyList.Add(synergy1);
+                    if (synergy1 != null) tempSynergyList.Add(synergy2);
+                    Debug.Log("Temp synergy list count is " + tempSynergyList.Count);
+
+                    foreach(GameObject synergy in tempSynergyList)
+                    {
+                        Debug.Log(synergy);
+                    }
+
+                    if(tempSynergyList.Count > 0)
+                    {
+                        foreach(GameObject synergyCard in tempSynergyList)
+                        {
+                            if(synergyStrength == 2)
+                            {
+                                Debug.Log("Strong Synergy found");
+                                tempstrongSynergyList.Add(synergyCard);
+                            }
+                            else if(synergyStrength == 1)
+                            {
+                                Debug.Log("Weak Synergy found");
+                                tempweakSynergyList.Add(synergyCard);
+                            }
+                        }
+
+                        if (tempstrongSynergyList.Count > 0)
+                        {
+                            Debug.Log("Strong Synergy List is not empty");
+                            if (tempweakSynergyList.Count == 1)
+                            {
+                                newcard = tempstrongSynergyList[0];
+                            }
+                            else
+                            {
+                                Debug.Log(random.Next(0, tempSynergyList.Count));
+                                newcard = tempstrongSynergyList[random.Next(0, tempstrongSynergyList.Count)];
+
+                            }
+                        }
+                        else if (tempweakSynergyList.Count > 0)
+                        {
+                            Debug.Log("Weak Synergy List is not empty");
+                            if (tempweakSynergyList.Count == 1)
+                            {
+                                
+                                newcard = tempweakSynergyList[0];
+                            }
+                            else
+                            {
+                                int storedint = random.Next(0, tempSynergyList.Count);
+                                
+                                Debug.Log(storedint);
+                                newcard = tempweakSynergyList[storedint];
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("No Other Synergy List has elements");
+                            int storedint = random.Next(0, tempSynergyList.Count);
+                            Debug.Log(storedint);
+
+                            if (tempSynergyList.Count == 1)
+                            {
+                                
+                                newcard = tempSynergyList[0];
+                            }
+                            else
+                            {
+                                newcard = tempSynergyList[storedint];
+                            }
+
+                            
+                        }
+                        Debug.Log("New card is" + newcard.name);
+                        hasSynergy = false;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("No Synergies found");
+                        return;
+                    }
+                    break;
+
+
+                case CardType.End:
+                    newcard = CheckSynergies(CardType.End, 1, cardToReplace);
+                    hasSynergy = false;
+                    break;
+
+            }
+        }
         playerHand.Insert(playerHand.IndexOf(cardToReplace.gameObject), newcard);
         playerHand.Remove(cardToReplace.gameObject);
         AudioManager.instance.PlayOneShot(FMODEvents.instance.cardDraw, transform.position);
@@ -221,13 +352,107 @@ public class PlayerHand : MonoBehaviour
         OnRedrawNumUpdate(currentRerollsLeft);
     }
 
-    private void RequestCard()
+    private GameObject CheckSynergies(CardType typeToFind, int indexToCheck, BaseCard cardToReplace)
+    {
+        BaseCard cardToCheck = playerHand[indexToCheck].GetComponent<BaseCard>();
+
+        List<CardObject> tempweakSynergyList = new();
+        List<CardObject> tempstrongSynergyList = new();
+
+        foreach (CardObject synergy in cardToCheck.CardDetails.StrongSynergies)
+        {
+            if (synergy.CardType == typeToFind && synergy.name != cardToReplace.CardDetails.name)
+            {
+                tempstrongSynergyList.Add(synergy);
+            }
+        }        
+        
+        foreach (CardObject synergy in cardToCheck.CardDetails.WeakSynergies)
+        {
+            if (synergy.CardType == typeToFind && synergy.name != cardToReplace.CardDetails.name)
+            {
+                tempweakSynergyList.Add(synergy);
+            }
+        }
+
+        if (tempstrongSynergyList.Count > 0)
+        {
+            List<CardObject> templist = new();
+            Debug.Log("Card has " + cardToCheck.CardDetails.StrongSynergies.Length + " synergies");
+            foreach (CardObject synergy in cardToCheck.CardDetails.StrongSynergies)
+            {
+                if (synergy.CardType == typeToFind && synergy.name != cardToReplace.CardDetails.name)
+                {
+                    templist.Add(synergy);
+                }
+                else if(synergy.CardType == typeToFind && synergy.name == cardToReplace.CardDetails.name)
+                {
+                    Debug.Log("Only Same Card is found in the strong synergy list");
+                    return null;
+                }
+            }
+            Debug.Log("Temp list has " + templist.Count + " elements");
+            if (templist.Count > 0)
+            {
+                SynergyStrength = 2;
+                return CardManager.Instance.FindSynergyCard(typeToFind, templist[random.Next(0, templist.Count - 1)], cardToReplace.gameObject);
+            }
+            else if (templist.Count == 1)
+            {
+                SynergyStrength = 2;
+                return CardManager.Instance.FindSynergyCard(typeToFind, templist[0], cardToReplace.gameObject);
+            }
+            else
+            {
+                Debug.LogWarning("Strong Synergy Check Synergy in player hand has returned null");
+                return null;
+            }
+        }
+        else if (tempweakSynergyList.Count > 0)
+        {
+            List<CardObject> templist = new();
+            foreach (CardObject synergy in cardToCheck.CardDetails.WeakSynergies)
+            {
+                if (synergy.CardType == typeToFind)
+                {
+                    templist.Add(synergy);
+                }
+            }
+            if (templist.Count > 0)
+            {
+                GameObject.FindObjectOfType<PlayerHand>().SynergyStrength = 1;
+                return CardManager.Instance.FindSynergyCard(typeToFind, templist[random.Next(0, templist.Count - 1)], cardToReplace.gameObject);
+            }
+            else if (templist.Count == 1)
+            {
+                SynergyStrength = 1;
+                return CardManager.Instance.FindSynergyCard(typeToFind, templist[0], cardToReplace.gameObject);
+            }
+            else
+            {
+                Debug.LogWarning("Weak Synergy Check Synergy in player hand has returned null");
+                return null;
+            }
+        }
+        else
+        {
+            SynergyStrength = 0;
+            return CardManager.Instance.RequestNewCard(typeToFind, cardToReplace.gameObject);
+        }
+    }
+
+    public void RequestCard()
     {
         List<GameObject> tempcardList = new();
         if (isRedraw)
         {
+            if (playerHand.Count > 0)
+            {
+                CardManager.Instance.ReturnHand(playerHand);
+                playerHand.Clear();
+            }
+
             OnRedrawNumUpdate(currentRerollsLeft);
-            Debug.Log("Request first Hand");
             tempcardList = CardManager.Instance.RequestInitialHand();
             foreach(GameObject card in tempcardList)
             {

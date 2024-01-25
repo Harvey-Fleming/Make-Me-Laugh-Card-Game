@@ -8,6 +8,7 @@ public class SynergyTicket : Ability
 
     public override void Use()
     {
+        GameObject.FindObjectOfType<PlayerHand>().HasSynergy = true;
         StartCoroutine(CamChange());
     }
 

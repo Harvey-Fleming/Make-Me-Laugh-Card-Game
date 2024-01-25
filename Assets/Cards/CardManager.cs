@@ -178,6 +178,79 @@ public class CardManager : MonoBehaviour
 
     }
 
+    public GameObject RequestSynergyCard(GameObject cardRequested, GameObject cardToReplace)
+    {
+        switch (cardRequested.GetComponent<BaseCard>().CardDetails.CardType)
+        {
+            case CardType.Start:
+                StartCardDeck.Remove(cardRequested);
+                SetCardParent(cardToReplace, startDeckParent.transform);
+                StartCardDeck.Add(cardToReplace);
+                return cardRequested;
+
+            case CardType.Middle:
+                MiddleCardDeck.Remove(cardRequested);
+                SetCardParent(cardToReplace, middleDeckParent.transform);
+                MiddleCardDeck.Add(cardToReplace);
+                return cardRequested;
+
+            case CardType.End:
+                EndCardDeck.Remove(cardRequested);
+                SetCardParent(cardToReplace, EndDeckParent.transform);
+                EndCardDeck.Add(cardToReplace);
+                return cardRequested;
+            default:
+                return null;
+        }
+
+    }
+
+    public GameObject FindSynergyCard(CardType typetoSearch, CardObject synergyToFind, GameObject cardToReplace)
+    {
+        Debug.Log("Synergy to find is" + synergyToFind.name);
+        switch (typetoSearch)
+        {
+            case CardType.Start:
+                foreach (GameObject deckcard in StartCardDeck)
+                {
+                    if (deckcard.GetComponent<BaseCard>().CardDetails == synergyToFind)
+                    {
+                        Debug.Log("Found the correct Synergy");
+                        return RequestSynergyCard(deckcard, cardToReplace);
+                    }
+                }
+                Debug.Log("No Found the correct Synergy");
+                return StartCardDeck[random.Next(0, StartCardDeck.Count)];
+            case CardType.Middle:
+                foreach (GameObject deckcard in MiddleCardDeck)
+                {
+                    if (deckcard.GetComponent<BaseCard>().CardDetails == synergyToFind)
+                    {
+                        Debug.Log("Found the correct Synergy");
+                        return RequestSynergyCard(deckcard, cardToReplace);
+
+                    }
+                }
+                Debug.Log("No Found the correct Synergy");
+                return MiddleCardDeck[random.Next(0, MiddleCardDeck.Count)];
+            case CardType.End:
+                foreach (GameObject deckcard in EndCardDeck)
+                {
+                    if (deckcard.GetComponent<BaseCard>().CardDetails == synergyToFind)
+                    {
+                        Debug.Log("Found the correct Synergy");
+                        return RequestSynergyCard(deckcard, cardToReplace);
+                    }
+                }
+                Debug.Log("No Found the correct Synergy");
+                return EndCardDeck[random.Next(0, EndCardDeck.Count)];
+            default:
+                Debug.Log("Default State");
+                return null;
+        }
+
+    }
+
     public void ReturnHand(List<GameObject> hand)
     {
         foreach(GameObject card in hand)
@@ -188,17 +261,51 @@ public class CardManager : MonoBehaviour
                 {
                     case CardType.Start:
                         StartCardDeck.Add(card);
-                        card.transform.parent = startDeckParent.transform;
+                        SetCardParent(card, startDeckParent.transform);
                         break;
                     case CardType.Middle:
                         MiddleCardDeck.Add(card);
-                        card.transform.parent = middleDeckParent.transform;
+                        SetCardParent(card, middleDeckParent.transform);
                         break;
                     case CardType.End:
                         EndCardDeck.Add(card);
-                        card.transform.parent = EndDeckParent.transform;
+                        SetCardParent(card, EndDeckParent.transform);
                         break;
                 }
+            }
+        }
+    }
+    #endregion
+
+    #region - FlipCards
+    public void StartFlipCards()
+    {
+        StartCoroutine(DisplayTopCards());
+    }
+
+    public IEnumerator DisplayTopCards()
+    {
+        FlipDecks(false);
+        yield return new WaitForSeconds(2f);
+        FlipDecks(true);
+    }
+
+    public void FlipDecks(bool hasShown)
+    {
+        if (!hasShown)
+        {
+            foreach (List<GameObject> deck in fullDecks)
+            {
+                deck[0].transform.localRotation = Quaternion.Euler(0, 180, 0);
+                deck[0].transform.localPosition = new Vector3(0, 0, 0.25f);
+            }
+        }
+        else
+        {
+            foreach (List<GameObject> deck in fullDecks)
+            {
+                deck[0].transform.localRotation = Quaternion.Euler(0, 0, 0);
+                deck[0].transform.localPosition = new Vector3(0, 0, 0);
             }
         }
     }

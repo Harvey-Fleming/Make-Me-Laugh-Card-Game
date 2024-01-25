@@ -19,5 +19,7 @@ public class RedrawToken : Ability
         AudioManager.instance.PlayOneShot(FMODEvents.instance.CoinInsert, this.transform.position);
         yield return new WaitForSeconds(1f);
         switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
+        GameObject.FindObjectOfType<PlayerHand>().IsRedraw = true;
+        GameObject.FindObjectOfType<PlayerHand>().RequestCard();
     }
 }

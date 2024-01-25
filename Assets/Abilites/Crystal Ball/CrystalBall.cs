@@ -11,5 +11,6 @@ public class CrystalBall : Ability
         smokeFX.SetActive(true);
         AudioManager.instance.PlayOneShot(FMODEvents.instance.CrystalBall, transform.position);
         gameObject.SetActive(false);
+        CardManager.Instance.StartFlipCards();
     }
 }
