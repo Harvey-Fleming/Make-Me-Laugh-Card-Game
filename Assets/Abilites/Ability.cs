@@ -8,6 +8,8 @@ public class Ability : MonoBehaviour
 
     protected SwitchCamState switchCamState;
 
+    [SerializeField] [TextArea] public string abilityTxtInfo;
+
     private void Start()
     {
         switchCamState = Camera.main.GetComponent<SwitchCamState>();

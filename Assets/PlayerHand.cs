@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerHand : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class PlayerHand : MonoBehaviour
     public int CurrentRerollsLeft { get => currentRerollsLeft; set => currentRerollsLeft = value; }
 
     private Outline storedOutline = null;
-    [SerializeField] private GameObject storedhover = null;
+    private GameObject storedhover = null;
     [SerializeField] private float cardHoverStrength = 0.005f;
     [SerializeField] private float abilityHoverStrength = 0.001f;
     [SerializeField] private float cardMaxHoverHeight = 0.1f;
@@ -25,6 +26,8 @@ public class PlayerHand : MonoBehaviour
     public static event UIEvent OnRedrawNumUpdate;
 
     [SerializeField] private SwitchCamState switchCamState;
+    [SerializeField] private GameObject UiTextBox;
+    [SerializeField] private TextMeshProUGUI UiText;
 
     private void Start()
     {
@@ -79,6 +82,10 @@ public class PlayerHand : MonoBehaviour
             else if (hit.transform.parent != null && hit.transform.parent.CompareTag("Ability"))
             {
                 storedhover = hit.transform.parent.gameObject;
+
+                UiText.text = hit.transform.GetComponent<Ability>().abilityTxtInfo;
+                UiTextBox.SetActive(true);
+
                 if (storedhover.transform.localPosition.y - abilityHoverStrength > -abilityMaxHoverHeight + -0.016)
                 {
                     storedhover.transform.localPosition -= new Vector3(0, abilityHoverStrength, 0);
@@ -88,6 +95,10 @@ public class PlayerHand : MonoBehaviour
             else if (hit.transform.CompareTag("Ability"))
             {
                 storedhover = hit.transform.gameObject;
+
+                UiText.text = hit.transform.GetComponent<Ability>().abilityTxtInfo;
+                UiTextBox.SetActive(true);
+
                 if (storedhover.transform.localPosition.y - abilityHoverStrength > -abilityMaxHoverHeight)
                 {
                     storedhover.transform.localPosition -= new Vector3(0, abilityHoverStrength, 0);
@@ -113,11 +124,17 @@ public class PlayerHand : MonoBehaviour
             if(storedhover.name != "SynergyTicket")
             {
                 storedhover.transform.localPosition = Vector3.zero;
+
+                UiTextBox.SetActive(false);
+
                 storedhover = null;
             }
             else
             {
                 storedhover.transform.localPosition = new Vector3(-0.017f, 0 + -0.016f, 0.003f);
+
+                UiTextBox.SetActive(false);
+
                 storedhover = null;     
             }
 
