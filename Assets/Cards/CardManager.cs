@@ -335,6 +335,7 @@ public class CardManager : MonoBehaviour
             if(i >= ClownLives)
             {
                 lightBulbs[i].SetActive(false);
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.lightExplode, lightBulbs[i].transform.position);
                 brokenLightBulbs[i].SetActive(true);
             }
             else

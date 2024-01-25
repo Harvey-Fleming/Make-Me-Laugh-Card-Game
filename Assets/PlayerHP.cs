@@ -29,12 +29,14 @@ public class PlayerHP : MonoBehaviour
         if(balloons[0].activeSelf == true)
         {
             balloons[0].SetActive(false);
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.balloonPop, balloons[0].transform.position);
             poppedBalloons[0].SetActive(true);
             Debug.Log("Change graphic");
         }
         else
         {
             balloons[1].SetActive(false);
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.balloonPop, balloons[1].transform.position);
             poppedBalloons[1].SetActive(true);
             Debug.Log("Change graphic");
         }

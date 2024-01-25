@@ -36,11 +36,13 @@ public class ElevatorAnimation : MonoBehaviour
     public void SendDown()
     {
         animator.SetBool("isUp", false);
+
     }    
 
     public void SendUp()
     {
         animator.SetBool("isUp", true);
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.cardLiftUp, this.transform.position);
     }
 
     public void ElevatorUp()
