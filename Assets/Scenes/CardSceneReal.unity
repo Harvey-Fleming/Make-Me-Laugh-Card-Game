@@ -6291,6 +6291,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingRedraws: 2
+  storedhover: {fileID: 0}
+  cardHoverStrength: 0.005
+  abilityHoverStrength: 0.005
+  cardMaxHoverHeight: 0.05
+  abilityMaxHoverHeight: 0.01
   SlotParents: {fileID: 122250530038242532}
   switchCamState: {fileID: 330585549}
 --- !u!1 &3090396053154320828

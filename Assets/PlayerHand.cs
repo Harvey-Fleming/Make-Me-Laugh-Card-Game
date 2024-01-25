@@ -10,7 +10,13 @@ public class PlayerHand : MonoBehaviour
     private int currentRerollsLeft;
 
     public int CurrentRerollsLeft { get => currentRerollsLeft; set => currentRerollsLeft = value; }
+
     private Outline storedOutline = null;
+    [SerializeField] private GameObject storedhover = null;
+    [SerializeField] private float cardHoverStrength = 0.005f;
+    [SerializeField] private float abilityHoverStrength = 0.001f;
+    [SerializeField] private float cardMaxHoverHeight = 0.1f;
+    [SerializeField] private float abilityMaxHoverHeight = 0.05f;
 
     [SerializeField] private Transform SlotParents;
 
@@ -40,6 +46,7 @@ public class PlayerHand : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
+            #region - Outline
             if (hit.transform.TryGetComponent<Outline>(out Outline hitOutline) && storedOutline == null)
             {
                 storedOutline = hitOutline;
@@ -65,15 +72,59 @@ public class PlayerHand : MonoBehaviour
                 storedOutline = hit.transform.GetComponentInChildren<Outline>();
                 storedOutline.enabled = true;
             }
+            #endregion
+            //Used for Storing Objects that will hover
 
+            //This is specific to the synergy ticket
+            else if (hit.transform.parent != null && hit.transform.parent.CompareTag("Ability"))
+            {
+                storedhover = hit.transform.parent.gameObject;
+                if (storedhover.transform.localPosition.y - abilityHoverStrength > -abilityMaxHoverHeight + -0.016)
+                {
+                    storedhover.transform.localPosition -= new Vector3(0, abilityHoverStrength, 0);
+                }
+                
+            }            
+            else if (hit.transform.CompareTag("Ability"))
+            {
+                storedhover = hit.transform.gameObject;
+                if (storedhover.transform.localPosition.y - abilityHoverStrength > -abilityMaxHoverHeight)
+                {
+                    storedhover.transform.localPosition -= new Vector3(0, abilityHoverStrength, 0);
+                }
+            }
+            else if (hit.transform.CompareTag("Card") && !hit.transform.parent.transform.parent.CompareTag("Decks"))
+            {
+                storedhover = hit.transform.gameObject;
+                if(storedhover.transform.localPosition.y < cardMaxHoverHeight)
+                {
+                    storedhover.transform.localPosition += new Vector3(0, cardHoverStrength, 0);
+                }
+
+            }
         }
         else if (!Physics.Raycast(ray, out hit, Mathf.Infinity) && storedOutline != null)
         {
             storedOutline.enabled = false;
             storedOutline = null;
+        }        
+        else if (!Physics.Raycast(ray, out hit, Mathf.Infinity) && storedhover != null)
+        {
+            if(storedhover.name != "SynergyTicket")
+            {
+                storedhover.transform.localPosition = Vector3.zero;
+                storedhover = null;
+            }
+            else
+            {
+                storedhover.transform.localPosition = new Vector3(-0.017f, 0 + -0.016f, 0.003f);
+                storedhover = null;     
+            }
+
         }
 
         //Handle Selecting Objects
+        #region - Clicking Objects
         if (Input.GetMouseButtonDown(0))
         {
             if (Physics.Raycast(ray, out  hit, Mathf.Infinity))
@@ -135,6 +186,7 @@ public class PlayerHand : MonoBehaviour
                 }
             }
         }
+        #endregion
     }
 
     private void RedrawCard(BaseCard cardToReplace)
