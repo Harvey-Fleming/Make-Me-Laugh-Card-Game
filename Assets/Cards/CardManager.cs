@@ -40,6 +40,8 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private PlayerHP playerHP;
 
+    [SerializeField] private Transform clown;
+
     private enum ClownStates { Angry, BigLaugh, Chuckle, Idle, Wait, Laugh}
 
     private ClownStates currentClownState;
@@ -295,6 +297,14 @@ public class CardManager : MonoBehaviour
         {
             case 0:
                 Debug.Log("You got nobody laughing");
+                if(ClownLives <= 3)
+                {
+                    SetClownState(ClownStates.Angry);
+                }
+                else
+                {
+                    SetClownState(ClownStates.Wait);
+                }
                 StartCoroutine(PlayerDamageScene());
                 break;
             case 1:
@@ -312,6 +322,7 @@ public class CardManager : MonoBehaviour
             case >= 4:
                 Debug.Log("Clown Loses 2 Lives!!!");
                 ClownLives -= 2;
+                SetClownState(ClownStates.BigLaugh);
                 StartCoroutine(ClownDamageScene());
                 break;
         }
@@ -337,11 +348,6 @@ public class CardManager : MonoBehaviour
         else
         {
             deckParents[0].transform.parent.transform.position += Vector3.down * 5;
-
-            if(ClownLives <= 3)
-            {
-                SetClownState(ClownStates.Angry);
-            }
         }
     }
 
@@ -371,14 +377,17 @@ public class CardManager : MonoBehaviour
             case ClownStates.Angry:
                 Debug.Log("Clown is angry");
                 clownAnimator.SetTrigger("Angry");
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.clownNotConvinced, clown.position);
                 break;
             case ClownStates.BigLaugh:
                 Debug.Log("Clown is big laughing");
                 clownAnimator.SetTrigger("BigLaugh");
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.bigClownLaugh, clown.position);
                 break;
             case ClownStates.Chuckle:
                 Debug.Log("Clown is chuckling");
                 clownAnimator.SetTrigger("Chuckle");
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.clownGiggle, clown.position);
                 break;
             case ClownStates.Idle:
                 Debug.Log("Clown is idle");
@@ -391,6 +400,7 @@ public class CardManager : MonoBehaviour
             case ClownStates.Laugh:
                 Debug.Log("Clown is laughing");
                 clownAnimator.SetTrigger("Laugh");
+                AudioManager.instance.PlayOneShot(FMODEvents.instance.clownLaugh, clown.position);
                 break;
             default:
                 break;
@@ -408,15 +418,26 @@ public class CardManager : MonoBehaviour
         ElevatorAnimation.OnElevatorStop -= OnElevatorStop;
     }
 
+
     IEnumerator ClownDamageScene()
     {
         switchCamState.canMove = false;
-        switchCamState.SwitchCamView(SwitchCamState.CamView.Lights);
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
         yield return new WaitForSeconds(2f);
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Right);
+        yield return new WaitForSeconds(2f);
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Lights);
+        yield return new WaitForSeconds(1f);
         UpdateClownHealthUI();
         yield return new WaitForSeconds(2f);
         switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
         switchCamState.canMove = true;
+
+        if (ClownLives <= 3)
+        {
+            SetClownState(ClownStates.Angry);
+        }
+
         ElevatorAnimation.Instance.SendUp();
         currentPhase = TurnPhase.Draw;
     }
@@ -424,8 +445,12 @@ public class CardManager : MonoBehaviour
     IEnumerator PlayerDamageScene()
     {
         switchCamState.canMove = false;
-        switchCamState.SwitchCamView(SwitchCamState.CamView.Left);
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
         yield return new WaitForSeconds(2f);
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Right);
+        yield return new WaitForSeconds(2f);
+        switchCamState.SwitchCamView(SwitchCamState.CamView.Left);
+        yield return new WaitForSeconds(1f);
         playerHP.TakeDamage();
         SetClownState(ClownStates.Idle);
         yield return new WaitForSeconds(2f);
