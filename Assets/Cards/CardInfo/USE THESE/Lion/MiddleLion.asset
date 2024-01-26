@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MiddleLion
   m_EditorClassIdentifier: 
   cardType: 1
-  partOfJoke: spit out the clown?
+  partOfJoke: spit out the <i>clown</i>?
   weakSynergies: []
   strongSynergies:
   - {fileID: 11400000, guid: 06ed5e6ae4228344b8fd9007e02534ac, type: 2}

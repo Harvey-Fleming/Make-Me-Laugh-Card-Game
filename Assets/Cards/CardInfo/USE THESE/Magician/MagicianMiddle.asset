@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MagicianMiddle
   m_EditorClassIdentifier: 
   cardType: 1
-  partOfJoke: fire their assistant?
+  partOfJoke: <i>fire</i> their <i>magic assistant</i>?
   weakSynergies:
   - {fileID: 11400000, guid: 7a47f9c5397332549978f66a649273ff, type: 2}
   strongSynergies:

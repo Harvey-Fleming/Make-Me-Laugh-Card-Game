@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ArsClownStart
   m_EditorClassIdentifier: 
   cardType: 0
-  partOfJoke: Why did the arsonistic clown...
+  partOfJoke: Why did the <i>arsonistic clown</i>...
   weakSynergies: []
   strongSynergies:
   - {fileID: 11400000, guid: 3de20e69a5ae2594f989d111e76fc92f, type: 2}

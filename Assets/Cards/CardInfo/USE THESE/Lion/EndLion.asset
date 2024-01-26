@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EndLion
   m_EditorClassIdentifier: 
   cardType: 2
-  partOfJoke: Because they tasted funny!
+  partOfJoke: Because they <i>tasted funny</i>!
   weakSynergies:
   - {fileID: 11400000}
   strongSynergies:

@@ -37,7 +37,7 @@ public class PlayerHP : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         lightSwitch.LightOnOff(false);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(5f);
         SceneManager.LoadScene(0);
     }
 }

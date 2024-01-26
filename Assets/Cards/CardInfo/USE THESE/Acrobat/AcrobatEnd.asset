@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AcrobatEnd
   m_EditorClassIdentifier: 
   cardType: 2
-  partOfJoke: To check their balance!
+  partOfJoke: To check their <i>balance</i>!
   weakSynergies: []
   strongSynergies:
   - {fileID: 11400000, guid: 312b44bf6f763484f98d84d2ecb91ea0, type: 2}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MagicianStart
   m_EditorClassIdentifier: 
   cardType: 0
-  partOfJoke: Why did the magician...
+  partOfJoke: Why did the <i>magician</i>...
   weakSynergies:
   - {fileID: 11400000, guid: cdcf57e195e5d0d49b7626a938ada27f, type: 2}
   strongSynergies:

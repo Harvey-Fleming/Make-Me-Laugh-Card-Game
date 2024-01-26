@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ArsClownEnd
   m_EditorClassIdentifier: 
   cardType: 2
-  partOfJoke: They wanted to lighten the mood!
+  partOfJoke: They wanted to <i>lighten</i> the mood!
   weakSynergies: []
   strongSynergies:
   - {fileID: 11400000, guid: 3de20e69a5ae2594f989d111e76fc92f, type: 2}

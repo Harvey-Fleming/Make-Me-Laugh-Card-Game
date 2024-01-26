@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AcrobatMiddle
   m_EditorClassIdentifier: 
   cardType: 1
-  partOfJoke: go to the bank?
+  partOfJoke: go to the <i>bank</i>?
   weakSynergies:
   - {fileID: 11400000, guid: 51fe8059f32388642a877bd1fe3f1cf7, type: 2}
   strongSynergies:

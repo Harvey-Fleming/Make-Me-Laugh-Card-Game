@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AcrobatStart
   m_EditorClassIdentifier: 
   cardType: 0
-  partOfJoke: Why did the acrobat...
+  partOfJoke: Why did the <i>acrobat</i>...
   weakSynergies:
   - {fileID: 11400000, guid: 312b44bf6f763484f98d84d2ecb91ea0, type: 2}
   strongSynergies:

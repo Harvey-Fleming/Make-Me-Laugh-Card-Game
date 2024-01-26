@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StartLion
   m_EditorClassIdentifier: 
   cardType: 0
-  partOfJoke: Why did the lion...
+  partOfJoke: Why did the <i>lion</i>...
   weakSynergies: []
   strongSynergies:
   - {fileID: 11400000, guid: d71fa3842e2223944b072a42f1fbf77e, type: 2}
