@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ElephantStart
   m_EditorClassIdentifier: 
   cardType: 0
-  partOfJoke: Why did the elephant
+  partOfJoke: Why did the <i>elephant</i>...
   weakSynergies:
   - {fileID: 11400000, guid: d1175b5cab5d77146bcf535c37a12fef, type: 2}
   strongSynergies:

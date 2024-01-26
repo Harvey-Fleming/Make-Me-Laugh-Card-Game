@@ -15,6 +15,8 @@ public class ElevatorAnimation : MonoBehaviour
     public delegate void ElevatorEvent(bool isUp);
     public static event ElevatorEvent OnElevatorStop;
 
+    [SerializeField] private PlayerHP playerHP;
+
     private void Awake()
     {
         if(Instance != null)
@@ -43,7 +45,11 @@ public class ElevatorAnimation : MonoBehaviour
     {
         Debug.Log("send up function");
         animator.SetBool("isUp", true);
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.cardLiftUp, this.transform.position);
+
+        if(playerHP.healthPoints > 0)
+        {
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.cardLiftUp, this.transform.position);
+        }
     }
 
     public void ElevatorUp()
