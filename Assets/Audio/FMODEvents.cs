@@ -37,6 +37,7 @@ public class FMODEvents : MonoBehaviour
     [field: SerializeField] public EventReference CrystalBall { get; private set; }
     [field: SerializeField] public EventReference CoinInsert { get; private set; }
     [field: SerializeField] public EventReference TokenInsert { get; private set; }
+    [field: SerializeField] public EventReference LightsOn { get; private set; }
 
 
     private void Awake()
