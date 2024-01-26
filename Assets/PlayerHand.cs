@@ -222,7 +222,7 @@ public class PlayerHand : MonoBehaviour
                 }
 
                 //If we hit the button
-                else if(hit.transform.name == "Button" && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
+                else if(hit.transform.name == "Button" && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right) && (CardManager.Instance.CurrentPhase == TurnPhase.Draw && playerHand.Count == 3))
                 {
                     if(CardManager.Instance.CurrentPhase == TurnPhase.Draw)
                     {
@@ -505,7 +505,7 @@ public class PlayerHand : MonoBehaviour
         playerHand.Clear();
 
         //Reset the player's number of rerolls
-        currentRerollsLeft += 3;
+        currentRerollsLeft += 2;
         OnRedrawNumUpdate(currentRerollsLeft);
     }
 
