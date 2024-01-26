@@ -135,6 +135,13 @@ public class PlayerHand : MonoBehaviour
             }
             else if (hit.transform.CompareTag("Card") && !hit.transform.parent.transform.parent.CompareTag("Decks"))
             {
+                if(storedhover != null)
+                {
+                    storedhover.transform.localPosition = Vector3.zero;
+                    UiTextBox.SetActive(false);
+
+                    storedhover = null;
+                }
                 ChangeCursor(redrawCursor);
 
                 storedhover = hit.transform.gameObject;
