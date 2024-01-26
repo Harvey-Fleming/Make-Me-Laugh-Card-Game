@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardType: 0
   partOfJoke: Why did the <i>arsonistic clown</i>...
-  weakSynergies: []
+  weakSynergies:
+  - {fileID: 11400000, guid: cdcf57e195e5d0d49b7626a938ada27f, type: 2}
   strongSynergies:
   - {fileID: 11400000, guid: 3de20e69a5ae2594f989d111e76fc92f, type: 2}
   - {fileID: 11400000, guid: 3de20e69a5ae2594f989d111e76fc92f, type: 2}
