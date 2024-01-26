@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ElephantMiddle
   m_EditorClassIdentifier: 
   cardType: 1
-  partOfJoke: suck at dancing?
+  partOfJoke: suck at <i>dancing</i>?
   weakSynergies:
   - {fileID: 11400000, guid: 1f12102633c3145439742ee69b643b02, type: 2}
   - {fileID: 11400000, guid: a248ef77b6e359747814f02b26717c23, type: 2}

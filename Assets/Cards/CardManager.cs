@@ -287,7 +287,7 @@ public class CardManager : MonoBehaviour
     public IEnumerator DisplayTopCards()
     {
         FlipDecks(false);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         FlipDecks(true);
     }
 

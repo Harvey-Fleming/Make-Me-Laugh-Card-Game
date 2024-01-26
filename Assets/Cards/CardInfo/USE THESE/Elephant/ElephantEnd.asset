@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ElephantEnd
   m_EditorClassIdentifier: 
   cardType: 2
-  partOfJoke: They have two left feet!
+  partOfJoke: They have <i>two left feet</i>!
   weakSynergies:
   - {fileID: 11400000, guid: f9eb4509927e18e41955552631772efd, type: 2}
   - {fileID: 11400000, guid: a248ef77b6e359747814f02b26717c23, type: 2}

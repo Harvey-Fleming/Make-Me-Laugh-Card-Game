@@ -5,11 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class PlayerHP : MonoBehaviour
 {
-    [SerializeField] private int healthPoints;
+    [SerializeField] public int healthPoints;
     [SerializeField] private int maxHealthPoints;
     [SerializeField] Lightswitch lightSwitch;
 
     [SerializeField] private GameObject[] balloons;
+    [SerializeField] private SwitchCamState switchCamState;
 
     private void Start()
     {
@@ -29,15 +30,17 @@ public class PlayerHP : MonoBehaviour
         else
         {
             balloons[1].GetComponent<Animator>().SetTrigger("Popped");
+            switchCamState.SwitchCamView(SwitchCamState.CamView.Left);
             StartCoroutine(PopDelay());
         }
     }
 
     IEnumerator PopDelay()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
+        AudioManager.instance.musicEventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         lightSwitch.LightOnOff(false);
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene(0);
     }
 }

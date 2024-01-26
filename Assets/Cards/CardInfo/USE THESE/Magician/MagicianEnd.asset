@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MagicianEnd
   m_EditorClassIdentifier: 
   cardType: 2
-  partOfJoke: They <i>saw</i> right through them?
+  partOfJoke: They <i>saw</i> right through them!
   weakSynergies: []
   strongSynergies:
   - {fileID: 11400000, guid: 13ce53a07fb59074bae6782958c231db, type: 2}
