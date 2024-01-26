@@ -11535,6 +11535,13 @@ MonoBehaviour:
       Data3: -517690185
       Data4: -1057611532
     Path: event:/Voices/ClownFukinDies
+  <clownFuckinKillsYou>k__BackingField:
+    Guid:
+      Data1: -630356446
+      Data2: 1077841520
+      Data3: -1399613772
+      Data4: 329715010
+    Path: event:/Voices/ClownFukinKillYou
   <cardDraw>k__BackingField:
     Guid:
       Data1: -1734650452
@@ -11626,6 +11633,13 @@ MonoBehaviour:
       Data3: -1723256183
       Data4: 1492320683
     Path: event:/SFX/TokenInsert
+  <LightsOn>k__BackingField:
+    Guid:
+      Data1: -617121942
+      Data2: 1339256042
+      Data3: 497519795
+      Data4: 2096508388
+    Path: event:/SFX/LightsOn
 --- !u!1001 &1995047963
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12714,7 +12728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingRedraws: 3
-  cardHoverStrength: 0.005
+  cardHoverStrength: 0.025
   abilityHoverStrength: 0.005
   cardMaxHoverHeight: 0.05
   abilityMaxHoverHeight: 0.01

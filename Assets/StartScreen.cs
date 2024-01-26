@@ -42,7 +42,8 @@ public class StartScreen : MonoBehaviour
     IEnumerator StartGame()
     {
         isPlayingCoroutine = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.LightsOn, transform.position - new Vector3(0, 0, -20f));
         lightSwitch.LightOnOff(true);
         yield return new WaitForSeconds(2f);
         isPlaying = true;

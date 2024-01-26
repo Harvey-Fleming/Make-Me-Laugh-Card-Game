@@ -61,7 +61,7 @@ public class PlayerHand : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
-            if (hit.transform.CompareTag("Interactable"))
+            if (hit.transform.CompareTag("Interactable") && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
             {
                 ChangeCursor(selectionCursor);
             }

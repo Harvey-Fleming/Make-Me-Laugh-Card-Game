@@ -37,10 +37,12 @@ public class PlayerHP : MonoBehaviour
 
     IEnumerator PopDelay()
     {
-        yield return new WaitForSeconds(2f);
-        AudioManager.instance.musicEventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        yield return new WaitForSeconds(0.5f);
         lightSwitch.LightOnOff(false);
-        yield return new WaitForSeconds(3f);
+        AudioManager.instance.musicEventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        yield return new WaitForSeconds(0.5f);
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.clownFuckinKillsYou, transform.position);
+        yield return new WaitForSeconds(6f);
         SceneManager.LoadScene(0);
     }
 }
