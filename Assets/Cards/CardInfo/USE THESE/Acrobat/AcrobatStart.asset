@@ -16,5 +16,6 @@ MonoBehaviour:
   partOfJoke: Why did the <i>acrobat</i>...
   weakSynergies:
   - {fileID: 11400000, guid: 312b44bf6f763484f98d84d2ecb91ea0, type: 2}
+  - {fileID: 11400000, guid: d1175b5cab5d77146bcf535c37a12fef, type: 2}
   strongSynergies:
   - {fileID: 11400000, guid: f9eb4509927e18e41955552631772efd, type: 2}

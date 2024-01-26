@@ -16,7 +16,7 @@ MonoBehaviour:
   partOfJoke: They have <i>two left feet</i>!
   weakSynergies:
   - {fileID: 11400000, guid: f9eb4509927e18e41955552631772efd, type: 2}
-  - {fileID: 11400000, guid: a248ef77b6e359747814f02b26717c23, type: 2}
   strongSynergies:
   - {fileID: 11400000, guid: d1175b5cab5d77146bcf535c37a12fef, type: 2}
   - {fileID: 11400000, guid: 1f12102633c3145439742ee69b643b02, type: 2}
+  - {fileID: 11400000, guid: a248ef77b6e359747814f02b26717c23, type: 2}

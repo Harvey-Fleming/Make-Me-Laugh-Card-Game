@@ -33,7 +33,7 @@ public class ClownDeathSequence : MonoBehaviour
         livingClown.SetActive(false);
         deadClown.SetActive(true);
         lightSwitch.LightOnOff(true);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(3.5f);
         lightSwitch.LightOnOff(false);
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(0);

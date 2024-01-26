@@ -287,7 +287,7 @@ public class CardManager : MonoBehaviour
     public IEnumerator DisplayTopCards()
     {
         FlipDecks(false);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         FlipDecks(true);
     }
 
@@ -415,7 +415,6 @@ public class CardManager : MonoBehaviour
                 {
                     SetClownState(ClownStates.Wait);
                 }
-
                 StartCoroutine(PlayerDamageScene());
                 break;
             case 1:

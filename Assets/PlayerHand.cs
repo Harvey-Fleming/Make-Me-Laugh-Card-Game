@@ -512,7 +512,7 @@ public class PlayerHand : MonoBehaviour
         playerHand.Clear();
 
         //Reset the player's number of rerolls
-        currentRerollsLeft += 2;
+        currentRerollsLeft = 3;
         OnRedrawNumUpdate(currentRerollsLeft);
     }
 
