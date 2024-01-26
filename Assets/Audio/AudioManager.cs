@@ -7,6 +7,8 @@ using FMOD.Studio;
 public class AudioManager : MonoBehaviour
 {
 
+    [SerializeField] private GameObject cabin;
+
     [Header("Volume")]
     [Range(0, 1)]
     public float masterVolume = 1;
@@ -55,6 +57,7 @@ public class AudioManager : MonoBehaviour
     {
         musicEventInstance = CreateEventInstance(musicEventReference);
         musicEventInstance.start();
+        musicEventInstance.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(cabin.transform.position));
 
     }
 

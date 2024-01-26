@@ -17,6 +17,7 @@ public class ClownDeathSequence : MonoBehaviour
     public IEnumerator DeathSequence()
     {
         Debug.Log("clown is dying");
+        AudioManager.instance.musicEventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         timer = 0f;
         lightSwitch.LightOnOff(false);
         switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
@@ -27,6 +28,8 @@ public class ClownDeathSequence : MonoBehaviour
         yield return new WaitForSeconds(1f);
         redLight.SetActive(true);
         yield return new WaitForSeconds(5f);
+        redLight.SetActive(false);
+        yield return new WaitForSeconds(2f);
         livingClown.SetActive(false);
         deadClown.SetActive(true);
         lightSwitch.LightOnOff(true);
