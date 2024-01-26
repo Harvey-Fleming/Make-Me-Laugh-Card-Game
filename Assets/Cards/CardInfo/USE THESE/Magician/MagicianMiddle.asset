@@ -16,7 +16,7 @@ MonoBehaviour:
   partOfJoke: <i>fire</i> their <i>magic assistant</i>?
   weakSynergies:
   - {fileID: 11400000, guid: 6e94e27c5ff88824383f25afcede4248, type: 2}
-  - {fileID: 11400000, guid: f9eb4509927e18e41955552631772efd, type: 2}
+  - {fileID: 11400000, guid: 7a47f9c5397332549978f66a649273ff, type: 2}
   strongSynergies:
   - {fileID: 11400000, guid: 13ce53a07fb59074bae6782958c231db, type: 2}
   - {fileID: 11400000, guid: 7774537f4bb000a4b8d9837909211998, type: 2}
