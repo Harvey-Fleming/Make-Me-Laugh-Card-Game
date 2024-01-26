@@ -49,7 +49,7 @@ public class PlayerHand : MonoBehaviour
 
     private void Update()
     {
-        SelectCardRaycast();
+            SelectCardRaycast();
     }
 
     //Handles Selecting Elements with the mouse such as Cards, buttons etc
@@ -67,7 +67,7 @@ public class PlayerHand : MonoBehaviour
             }
 
             #region - Outline
-            if (hit.transform.TryGetComponent<Outline>(out Outline hitOutline) && storedOutline == null)
+            if (hit.transform.TryGetComponent<Outline>(out Outline hitOutline) && storedOutline == null && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
             {
                 if(hit.transform.TryGetComponent<PurchaseAbility>(out PurchaseAbility purchaseAbility) && purchaseAbility.hasAbility)
                 {
@@ -79,7 +79,7 @@ public class PlayerHand : MonoBehaviour
                     storedOutline.enabled = true;
                 }
             }
-            else if (hit.transform.TryGetComponent<Outline>(out hitOutline) && storedOutline != null)
+            else if (hit.transform.TryGetComponent<Outline>(out hitOutline) && storedOutline != null && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
             {
                 storedOutline.enabled = false;
                 storedOutline = hitOutline;
@@ -87,13 +87,13 @@ public class PlayerHand : MonoBehaviour
             }
 
             //If we are not already outlining something and hover over an outlinable
-            if (hit.transform.GetComponentInChildren<Outline>() != null && storedOutline == null)
+            if (hit.transform.GetComponentInChildren<Outline>() != null && storedOutline == null && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
             {
                 storedOutline = hit.transform.GetComponentInChildren<Outline>();
                 storedOutline.enabled = true;
             }
             //If we are not already outlining something and hover over an outlinable
-            else if (hit.transform.GetComponentInChildren<Outline>() != null && storedOutline != null)
+            else if (hit.transform.GetComponentInChildren<Outline>() != null && storedOutline != null && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
             {
                 storedOutline.enabled = false;
                 storedOutline = hit.transform.GetComponentInChildren<Outline>();
@@ -101,13 +101,12 @@ public class PlayerHand : MonoBehaviour
             }
             #endregion
 
+
             #region - Hover Over
             //Used for Storing Objects that will hover
 
-            
-
             //This is specific to the synergy ticket
-            else if (hit.transform.parent != null && hit.transform.parent.CompareTag("Ability"))
+            else if (hit.transform.parent != null && hit.transform.parent.CompareTag("Ability") && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
             {
                 storedhover = hit.transform.parent.gameObject;
                 ChangeCursor(selectionCursor);
@@ -121,7 +120,7 @@ public class PlayerHand : MonoBehaviour
                 }
                 
             }            
-            else if (hit.transform.CompareTag("Ability"))
+            else if (hit.transform.CompareTag("Ability") && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
             {
                 storedhover = hit.transform.gameObject;
                 ChangeCursor(selectionCursor);
@@ -144,6 +143,10 @@ public class PlayerHand : MonoBehaviour
                     storedhover.transform.localPosition += new Vector3(0, cardHoverStrength, 0);
                 }
 
+            }            
+            else if (hit.transform.CompareTag("Card") && hit.transform.parent.transform.parent.CompareTag("Decks") && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
+            {
+                ChangeCursor(redrawCursor);
             }
         }
         else if (!Physics.Raycast(ray, out hit, Mathf.Infinity) && storedOutline != null)
@@ -200,7 +203,7 @@ public class PlayerHand : MonoBehaviour
                     }
                 }
                 //If it is a card in the deck and we have selected a card to replace
-                else if (hit.transform.TryGetComponent<BaseCard>(out hitCard) && hit.transform.parent.transform.parent.CompareTag("Decks"))
+                else if (hit.transform.TryGetComponent<BaseCard>(out hitCard) && hit.transform.parent.transform.parent.CompareTag("Decks") && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
                 {
                     if (hasSynergy | currentRerollsLeft > 0)
                     {
@@ -219,7 +222,7 @@ public class PlayerHand : MonoBehaviour
                 }
 
                 //If we hit the button
-                else if(hit.transform.name == "Button")
+                else if(hit.transform.name == "Button" && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
                 {
                     if(CardManager.Instance.CurrentPhase == TurnPhase.Draw)
                     {
@@ -227,17 +230,17 @@ public class PlayerHand : MonoBehaviour
                         ResetCards();
                     }
                 }
-                else if (hit.transform.name == "Table.001")
+                else if (hit.transform.name == "Table.001" && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
                 {
                     hit.transform.GetComponent<PurchaseAbility>().TryPurchaseAbility();
                 }
                 //Used for clicking abilities.
-                else if (hit.transform.CompareTag("Ability"))
+                else if (hit.transform.CompareTag("Ability") && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
                 {
                     hit.transform.parent.GetComponent<PurchaseAbility>().UseCurrentAbility();
                 }
                 //Used for synergy Ticket.
-                else if (hit.transform.parent != null && hit.transform.parent.CompareTag("Ability"))
+                else if (hit.transform.parent != null && hit.transform.parent.CompareTag("Ability") && (switchCamState.currentView == SwitchCamState.CamView.Left | switchCamState.currentView == SwitchCamState.CamView.Top | switchCamState.currentView == SwitchCamState.CamView.Right))
                 {
                     hit.transform.parent.transform.parent.GetComponent<PurchaseAbility>().UseCurrentAbility();
                 }
@@ -502,7 +505,7 @@ public class PlayerHand : MonoBehaviour
         playerHand.Clear();
 
         //Reset the player's number of rerolls
-        currentRerollsLeft += 2;
+        currentRerollsLeft += 3;
         OnRedrawNumUpdate(currentRerollsLeft);
     }
 
