@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHP : MonoBehaviour
 {
     [SerializeField] private int healthPoints;
     [SerializeField] private int maxHealthPoints;
+    [SerializeField] Lightswitch lightSwitch;
 
     [SerializeField] private GameObject[] balloons;
 
@@ -27,6 +29,15 @@ public class PlayerHP : MonoBehaviour
         else
         {
             balloons[1].GetComponent<Animator>().SetTrigger("Popped");
+            StartCoroutine(PopDelay());
         }
+    }
+
+    IEnumerator PopDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        lightSwitch.LightOnOff(false);
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(0);
     }
 }

@@ -7,12 +7,9 @@ public class Lightswitch : MonoBehaviour
     bool isLightsOn;
     [SerializeField] private GameObject[] lights;
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            LightOnOff(isLightsOn);
-        }
+        LightOnOff(false);
     }
 
     public void LightOnOff(bool lightBool)

@@ -28,7 +28,13 @@ public class SwitchCamState : MonoBehaviour
     private Vector3 nextCamPos;
     private Quaternion nextCamRot;
 
+    public GameObject playerHandObj;
+
     public bool canMove;
+
+    public bool isDying;
+
+    [SerializeField] private StartScreen startScreen;
 
     [Header("Move Time")]
     [SerializeField] bool isLerping;
@@ -43,40 +49,43 @@ public class SwitchCamState : MonoBehaviour
 
     private void Update()
     {
-        if (canMove)
+        if (startScreen.startGame)
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (canMove)
             {
-                SwitchCamView(CamView.Top);
-            }
-
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                if (currentView == CamView.Right)
+                if (Input.GetKeyDown(KeyCode.W))
                 {
                     SwitchCamView(CamView.Top);
                 }
-                else
+
+                if (Input.GetKeyDown(KeyCode.A))
                 {
-                    SwitchCamView(CamView.Left);
+                    if (currentView == CamView.Right)
+                    {
+                        SwitchCamView(CamView.Top);
+                    }
+                    else
+                    {
+                        SwitchCamView(CamView.Left);
+                    }
+
                 }
 
-            }
-
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                SwitchCamView(CamView.Front);
-            }
-
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                if (currentView == CamView.Left)
+                if (Input.GetKeyDown(KeyCode.S))
                 {
-                    SwitchCamView(CamView.Top);
+                    SwitchCamView(CamView.Front);
                 }
-                else
+
+                if (Input.GetKeyDown(KeyCode.D))
                 {
-                    SwitchCamView(CamView.Right);
+                    if (currentView == CamView.Left)
+                    {
+                        SwitchCamView(CamView.Top);
+                    }
+                    else
+                    {
+                        SwitchCamView(CamView.Right);
+                    }
                 }
             }
         }
@@ -100,55 +109,64 @@ public class SwitchCamState : MonoBehaviour
 
     public void SwitchCamView(CamView newCamView)
     {
-        switch (newCamView)
+        if (!isDying)
         {
-            case CamView.Top:
-                currentView = CamView.Top;
-                nextCamPos = topViewPos;
-                nextCamRot = Quaternion.Euler(topViewRot);
-                timer = 0f;
-                isLerping = true;
-                break;
+            switch (newCamView)
+            {
+                case CamView.Top:
+                    currentView = CamView.Top;
+                    nextCamPos = topViewPos;
+                    nextCamRot = Quaternion.Euler(topViewRot);
+                    timer = 0f;
+                    playerHandObj.SetActive(false);
+                    isLerping = true;
+                    break;
 
-            case CamView.Front:
-                currentView = CamView.Front;
-                nextCamPos = frontViewPos;
-                nextCamRot = Quaternion.Euler(frontViewRot);
-                timer = 0f;
-                isLerping = true;
-                break;
+                case CamView.Front:
+                    currentView = CamView.Front;
+                    nextCamPos = frontViewPos;
+                    nextCamRot = Quaternion.Euler(frontViewRot);
+                    timer = 0f;
+                    playerHandObj.SetActive(true);
+                    isLerping = true;
+                    break;
 
-            case CamView.Left:
-                currentView = CamView.Left;
-                nextCamPos = leftViewPos;
-                nextCamRot = Quaternion.Euler(leftViewRot);
-                timer = 0f;
-                isLerping = true;
-                break;
+                case CamView.Left:
+                    currentView = CamView.Left;
+                    nextCamPos = leftViewPos;
+                    nextCamRot = Quaternion.Euler(leftViewRot);
+                    timer = 0f;
+                    playerHandObj.SetActive(false);
+                    isLerping = true;
+                    break;
 
-            case CamView.Right:
-                currentView = CamView.Right;
-                nextCamPos = rightViewPos;
-                nextCamRot = Quaternion.Euler(rightViewRot);
-                timer = 0f;
-                isLerping = true;
-                break;
+                case CamView.Right:
+                    currentView = CamView.Right;
+                    nextCamPos = rightViewPos;
+                    nextCamRot = Quaternion.Euler(rightViewRot);
+                    timer = 0f;
+                    playerHandObj.SetActive(false);
+                    isLerping = true;
+                    break;
 
-            case CamView.Lights:
-                currentView = CamView.Lights;
-                nextCamPos = lightsViewPos;
-                nextCamRot = Quaternion.Euler(lightsViewRot);
-                timer = 0f;
-                isLerping = true;
-                break;
+                case CamView.Lights:
+                    currentView = CamView.Lights;
+                    nextCamPos = lightsViewPos;
+                    nextCamRot = Quaternion.Euler(lightsViewRot);
+                    timer = 0f;
+                    playerHandObj.SetActive(false);
+                    isLerping = true;
+                    break;
 
-            case CamView.CoinSlot:
-                currentView = CamView.CoinSlot;
-                nextCamPos = coinSlotPos;
-                nextCamRot = Quaternion.Euler(coinSlotRot);
-                timer = 0f;
-                isLerping = true;
-                break;
+                case CamView.CoinSlot:
+                    currentView = CamView.CoinSlot;
+                    nextCamPos = coinSlotPos;
+                    nextCamRot = Quaternion.Euler(coinSlotRot);
+                    timer = 0f;
+                    playerHandObj.SetActive(false);
+                    isLerping = true;
+                    break;
+            }
         }
     }
 }

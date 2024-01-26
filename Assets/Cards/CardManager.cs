@@ -7,7 +7,7 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     public static CardManager Instance;
-    [SerializeField] private int ClownLives = 6;
+    [SerializeField] public int ClownLives = 6;
 
     System.Random random;
 
@@ -43,11 +43,13 @@ public class CardManager : MonoBehaviour
 
     [SerializeField] private Transform clown;
 
-    private enum ClownStates { Angry, BigLaugh, Chuckle, Idle, Wait, Laugh}
+    public enum ClownStates { Angry, BigLaugh, Chuckle, Idle, Wait, Laugh, Die}
 
     private ClownStates currentClownState;
 
     [SerializeField] private Animator clownAnimator;
+
+    [SerializeField] private ClownDeathSequence clownDeath;
 
 
     //TODO - Will handle checking synergies when cards are submitted
@@ -93,7 +95,6 @@ public class CardManager : MonoBehaviour
     {
         ShuffleDecks();
 
-        ElevatorAnimation.Instance.SendUp();
 
         SetClownState(ClownStates.Idle);
     }
@@ -316,7 +317,7 @@ public class CardManager : MonoBehaviour
         if (isUp && currentPhase is TurnPhase.Draw)
         {
             OnRoundStart();
-            SetClownState(ClownStates.Wait);
+
             switchCamState.canMove = true;
         }
         else if (!isUp && currentPhase is TurnPhase.Submit)
@@ -405,6 +406,7 @@ public class CardManager : MonoBehaviour
         {
             case 0:
                 Debug.Log("You got nobody laughing");
+                
                 if(ClownLives <= 3)
                 {
                     SetClownState(ClownStates.Angry);
@@ -413,6 +415,7 @@ public class CardManager : MonoBehaviour
                 {
                     SetClownState(ClownStates.Wait);
                 }
+
                 StartCoroutine(PlayerDamageScene());
                 break;
             case 1:
@@ -453,6 +456,7 @@ public class CardManager : MonoBehaviour
         if (ClownLives <= 0)
         {
             currentPhase = TurnPhase.Victory;
+
             Debug.Log("Clown has been defeated");
         }
         else
@@ -480,7 +484,7 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    private void SetClownState(ClownStates clownState)
+    public void SetClownState(ClownStates clownState)
     {
         switch (clownState)
         {
@@ -512,7 +516,8 @@ public class CardManager : MonoBehaviour
                 clownAnimator.SetTrigger("Laugh");
                 AudioManager.instance.PlayOneShot(FMODEvents.instance.clownLaugh, clown.position);
                 break;
-            default:
+            case ClownStates.Die:
+                clownAnimator.SetTrigger("Die");
                 break;
         }
     }
@@ -539,17 +544,24 @@ public class CardManager : MonoBehaviour
         switchCamState.SwitchCamView(SwitchCamState.CamView.Lights);
         yield return new WaitForSeconds(1f);
         UpdateClownHealthUI();
-        yield return new WaitForSeconds(2f);
-        switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
-        switchCamState.canMove = true;
-
-        if (ClownLives <= 3)
+        if(ClownLives <= 0)
         {
-            SetClownState(ClownStates.Angry);
+            ClownDeath();
         }
+        else
+        {
+            yield return new WaitForSeconds(2f);
+            switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
+            switchCamState.canMove = true;
 
-        ElevatorAnimation.Instance.SendUp();
-        currentPhase = TurnPhase.Draw;
+            if (ClownLives <= 3 && ClownLives > 0)
+            {
+                SetClownState(ClownStates.Angry);
+            }
+
+            ElevatorAnimation.Instance.SendUp();
+            currentPhase = TurnPhase.Draw;
+        }
     }
 
     IEnumerator PlayerDamageScene()
@@ -568,6 +580,16 @@ public class CardManager : MonoBehaviour
         switchCamState.canMove = true;
         ElevatorAnimation.Instance.SendUp();
         currentPhase = TurnPhase.Draw;
+    }
+
+    public void ClownDeath()
+    {
+        if (ClownLives <= 0)
+        {
+            StartCoroutine(clownDeath.DeathSequence());
+
+            Debug.Log("Clown has been defeated");
+        }
     }
 
 

@@ -7,6 +7,7 @@ TagManager:
   - Decks
   - Ability
   - Card
+  - Interactable
   layers:
   - Default
   - TransparentFX

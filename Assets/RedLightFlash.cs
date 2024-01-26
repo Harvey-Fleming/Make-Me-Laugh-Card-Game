@@ -27,7 +27,7 @@ public class RedLightFlash : MonoBehaviour
         redLight.enabled = false;
         yield return new WaitForSeconds(flashSpeed);
         redLight.enabled = true;
-        yield return new WaitForSeconds(flashSpeed);
+        yield return new WaitForSeconds(0.05f);
         isFlashing = false;
     }
 }

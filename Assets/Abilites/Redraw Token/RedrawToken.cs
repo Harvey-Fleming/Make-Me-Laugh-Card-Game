@@ -13,7 +13,6 @@ public class RedrawToken : Ability
 
     IEnumerator CamChange()
     {
-        //gameObject.SetActive(false);
         switchCamState.SwitchCamView(SwitchCamState.CamView.CoinSlot);
         redrawTicketAnimator.SetTrigger("Use");
         AudioManager.instance.PlayOneShot(FMODEvents.instance.CoinInsert, this.transform.position);

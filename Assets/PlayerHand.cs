@@ -7,7 +7,7 @@ public class PlayerHand : MonoBehaviour
 {
     private List<GameObject> playerHand = new();
 
-    [SerializeField] private int startingRedraws = 2;
+    [SerializeField] private int startingRedraws = 3;
     private int currentRerollsLeft;
 
     private Outline storedOutline = null;
@@ -36,10 +36,15 @@ public class PlayerHand : MonoBehaviour
     public bool HasSynergy { get => hasSynergy; set => hasSynergy = value; }
     public int SynergyStrength { get => synergyStrength; set => synergyStrength = value; }
 
+    [SerializeField] Texture2D defaultCursor;
+    [SerializeField] Texture2D selectionCursor;
+    [SerializeField] Texture2D redrawCursor;
+
     private void Start()
     {
         OnRedrawNumUpdate(currentRerollsLeft);
         currentRerollsLeft = startingRedraws;
+        ChangeCursor(defaultCursor);
     }
 
     private void Update()
@@ -56,11 +61,23 @@ public class PlayerHand : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
+            if (hit.transform.CompareTag("Interactable"))
+            {
+                ChangeCursor(selectionCursor);
+            }
+
             #region - Outline
             if (hit.transform.TryGetComponent<Outline>(out Outline hitOutline) && storedOutline == null)
             {
-                storedOutline = hitOutline;
-                storedOutline.enabled = true;
+                if(hit.transform.TryGetComponent<PurchaseAbility>(out PurchaseAbility purchaseAbility) && purchaseAbility.hasAbility)
+                {
+                    storedOutline.enabled = false;
+                }
+                else
+                {
+                    storedOutline = hitOutline;
+                    storedOutline.enabled = true;
+                }
             }
             else if (hit.transform.TryGetComponent<Outline>(out hitOutline) && storedOutline != null)
             {
@@ -87,10 +104,13 @@ public class PlayerHand : MonoBehaviour
             #region - Hover Over
             //Used for Storing Objects that will hover
 
+            
+
             //This is specific to the synergy ticket
             else if (hit.transform.parent != null && hit.transform.parent.CompareTag("Ability"))
             {
                 storedhover = hit.transform.parent.gameObject;
+                ChangeCursor(selectionCursor);
 
                 UiText.text = hit.transform.parent.GetComponent<Ability>().abilityTxtInfo;
                 UiTextBox.SetActive(true);
@@ -104,6 +124,7 @@ public class PlayerHand : MonoBehaviour
             else if (hit.transform.CompareTag("Ability"))
             {
                 storedhover = hit.transform.gameObject;
+                ChangeCursor(selectionCursor);
 
                 UiText.text = hit.transform.GetComponent<Ability>().abilityTxtInfo;
                 UiTextBox.SetActive(true);
@@ -115,6 +136,8 @@ public class PlayerHand : MonoBehaviour
             }
             else if (hit.transform.CompareTag("Card") && !hit.transform.parent.transform.parent.CompareTag("Decks"))
             {
+                ChangeCursor(redrawCursor);
+
                 storedhover = hit.transform.gameObject;
                 if(storedhover.transform.localPosition.y < cardMaxHoverHeight)
                 {
@@ -125,6 +148,7 @@ public class PlayerHand : MonoBehaviour
         }
         else if (!Physics.Raycast(ray, out hit, Mathf.Infinity) && storedOutline != null)
         {
+            ChangeCursor(defaultCursor);
             storedOutline.enabled = false;
             storedOutline = null;
         }        
@@ -133,7 +157,7 @@ public class PlayerHand : MonoBehaviour
             if(storedhover.name != "SynergyTicket")
             {
                 storedhover.transform.localPosition = Vector3.zero;
-
+                ChangeCursor(defaultCursor);
                 UiTextBox.SetActive(false);
 
                 storedhover = null;
@@ -141,7 +165,7 @@ public class PlayerHand : MonoBehaviour
             else
             {
                 storedhover.transform.localPosition = new Vector3(-0.017f, 0 + -0.016f, 0.003f);
-
+                ChangeCursor(defaultCursor);
                 UiTextBox.SetActive(false);
 
                 storedhover = null;     
@@ -484,11 +508,25 @@ public class PlayerHand : MonoBehaviour
 
     private void OnRoundStart()
     {
-        isRedraw = true;
-        switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
-        switchCamState.canMove = true;
-        RequestCard();
+        if(CardManager.Instance.ClownLives <= 0)
+        {
+
+        }
+        else
+        {
+            CardManager.Instance.SetClownState(CardManager.ClownStates.Wait);
+            isRedraw = true;
+            switchCamState.SwitchCamView(SwitchCamState.CamView.Front);
+            switchCamState.canMove = true;
+            RequestCard();
+        }
     }
+
+    public void ChangeCursor(Texture2D cursorTexture)
+    {
+        Cursor.SetCursor(cursorTexture, new Vector2(10,10), CursorMode.Auto);
+    }
+
 
     #region - Event Subscription
     private void OnEnable()
