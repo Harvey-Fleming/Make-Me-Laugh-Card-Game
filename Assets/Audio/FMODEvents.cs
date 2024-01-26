@@ -20,6 +20,7 @@ public class FMODEvents : MonoBehaviour
     [field: SerializeField] public EventReference clownGiggle { get; private set; }
     [field: SerializeField] public EventReference clownNotConvinced { get; private set; }
     [field: SerializeField] public EventReference clownFuckinDies { get; private set; }
+    [field: SerializeField] public EventReference clownFuckinKillsYou { get; private set; }
 
     [field: Header("UI SFX")]
 
